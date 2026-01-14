@@ -7,6 +7,7 @@ body{
     margin: 0;
     height: 100vh;
     background: linear-gradient(to right, #eaf4ff, #f4faff);
+    background-image: url("/frontend/assets/images/why-you-need-a-hospital-management-system.png");
     display: flex;
     justify-content: center;
     align-items: center;
