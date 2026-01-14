@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reception Dashboard</title>
+
+  <link rel="stylesheet" href="/frontend/css/dashboard.css" />
+  <link rel="stylesheet" href="/frontend/css/base.css">
+
+  <!-- SweetAlert2 for Toasts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="logo">Hospital System</h2>
+
+    <nav id="sidebarNav">
+      <a href="/frontend/html/dashboard.html">Dashboard</a>
+      <a href="/frontend/html/patient.html">Patients</a>
+      <a href="/frontend/html/appointment.html">Appointments</a>
+    </nav>
+
+    <button class="logout">Logout</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div>
+        <h1>Welcome, <span id="userName">—</span></h1>
+        <p id="userRole">— Dashboard</p>
+      </div>
+
+      <div class="user">
+        <span id="headerUserName">—</span>
+        <div class="avatar" id="userAvatar">?</div>
+      </div>
+    </header>
+
+    <!-- STATS -->
+    <section class="stats">
+      <div class="card">
+        <p>Total Patients</p>
+        <h2 id="totalPatients">—</h2>
+      </div>
+      <div class="card">
+        <p>Today's Appointments</p>
+        <h2 id="todayAppointments">—</h2>
+      </div>
+      <div class="card">
+        <p>New Registrations</p>
+        <h2 id="newRegistrations">—</h2>
+      </div>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="content">
+      <div class="box">
+        <h3>Today's Appointments</h3>
+        <ul id="appointmentsList"></ul>
+      </div>
+
+      <div class="box">
+        <h3>Recent Patients</h3>
+        <ul id="patientsList"></ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="/frontend/js/toast.js"></script>
+<script src="/frontend/js/nav.js"></script>
+<script src="/frontend/js/department.js"></script>
+</body>
+</html>
