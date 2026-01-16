@@ -1,10 +1,10 @@
 import db from '../db/index.js';
 
-export const createPatient=async(patient_id,first_name,last_name,age,gender,contact_number,address,status)=>{
+export const createPatient=async(first_name,last_name,age,gender,contact_number,address,status)=>{
     const query=`INSERT INTO patients 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-    const [rows]=await db.execute(query,[patient_id,first_name,last_name,age,gender,contact_number,address,status]);
+    const [rows]=await db.execute(query,[first_name,last_name,age,gender,contact_number,address,status]);
     return rows;
 }
 
