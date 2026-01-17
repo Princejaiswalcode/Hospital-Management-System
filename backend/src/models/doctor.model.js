@@ -5,8 +5,8 @@ export const createDoctor=async(first_name,last_name,specialization,phone_number
         (first_name, last_name, specialization, phone_number, email)
         VALUES (?, ?, ?, ?, ?)`;
     
-    const [rows]=await db.execute(query,[first_name,last_name,specialization,phone_number,email]);
-    return rows;
+    const doctor=await db.execute(query,[first_name,last_name,specialization,phone_number,email]);
+    return doctor;
 }
 
 export const getDoctorList=async()=>{

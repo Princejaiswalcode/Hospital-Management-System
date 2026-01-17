@@ -1,6 +1,6 @@
 import db from '../db/index.js'
 
-export const createAppointments=async(patient_id,doctor_id,appointment_date,appointment_time,appointment_type,status)=>{
+export const createAppointment=async(patient_id,doctor_id,appointment_date,appointment_time,appointment_type,status)=>{
     const query=`INSERT INTO appointments
         (patient_id,doctor_id,appointment_date,appointment_time,appointment_type,status)
         VALUES (?, ?, ?, ?, ?, ?)`;
@@ -9,7 +9,7 @@ export const createAppointments=async(patient_id,doctor_id,appointment_date,appo
     return rows.InsertId;
 }
 
-export const getTodaysAppointments=async(appointment_date)=>{
+export const getTodaysAppointments=async(appointment_date,appointment_month)=>{
     const query=`SELECT 
         a.appointment_id,
         p.first_name AS patient_name,
@@ -20,9 +20,9 @@ export const getTodaysAppointments=async(appointment_date)=>{
         FROM appointments a
         JOIN patients p ON a.patient_id=p.patient_id
         JOIN doctors d ON a.doctor_id=d.doctor_id
-        WHERE a.appointment_date=?`;
+        WHERE day(a.appointment_date)=? and month(a.appointment_date)=?`;
 
-    const [result]=await db.execute(query,[appointment_date]);
+    const [result]=await db.execute(query,[appointment_date,appointment_month]);
     return result;
 }
 

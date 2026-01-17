@@ -25,4 +25,5 @@ export const updatePatient=async(patient_id,first_name,last_name,contact_number,
     WHERE patient_id=?`;
 
     const [result]=await db.execute(query,[first_name,last_name,contact_number,address,status,patient_id]);
+    return result;
 }

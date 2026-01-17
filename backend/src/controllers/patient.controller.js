@@ -1,4 +1,3 @@
-import db from "../config/db.js";
 import { createPatient,listPatient,updatePatient } from "../models/patient.model.js";
 import{ApiError} from "../utils/ApiError.js";
 import{ApiResponse} from "../utils/ApiResponse.js";
@@ -17,7 +16,7 @@ const createpatient=asyncHandler(async(req,res)=>{
     if(!status || !status.trim())throw new ApiError(400, "Patient status is required");
     const patient=await createPatient(first_name,last_name,age,gender,contact_number,address,status);
 
-    return res(200).json(
+    return res.status(200).json(
         new ApiResponse(200,patient,'Patient Created Successfully')
     )
 })
@@ -32,7 +31,7 @@ const getPatientList=asyncHandler(async(req,res)=>{
     )
 })
 
-const updatepatient=asyncHandler(async(res,res)=>{
+const updatepatient=asyncHandler(async(req,res)=>{
     const {patient_id,first_name,last_name,contact_number,address,status}=req.body
 
     if (!patient_id)throw new ApiError(400, "Patient ID is required");
