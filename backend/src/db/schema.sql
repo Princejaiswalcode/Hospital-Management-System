@@ -46,4 +46,3 @@ CREATE TABLE appointments(
         FOREIGN KEY (doctor_id)
         REFERENCES doctors(doctor_id)
 );
-

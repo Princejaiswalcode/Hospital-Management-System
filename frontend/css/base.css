@@ -112,3 +112,36 @@ body {
   font-size: 12px;
   font-weight: bold;
 }
+
+
+/*for form button */
+/* PAGE TITLE BAR */
+.page-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* SECONDARY BUTTON */
+.secondary-btn {
+  background: #e5e7eb;
+  color: #111;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* FORM INPUT DEFAULTS */
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: #2563eb;
+}
