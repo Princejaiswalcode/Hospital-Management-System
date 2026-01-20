@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
   createappointment,
-  todaysAppointments,
+  getAllAppointments,
   updateStatus
 } from "../controllers/appointment.controller.js";
-import { verifyJWT } from "../middlewares/verifyJWT.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -17,7 +17,7 @@ router.post(
 router.get(
   "/",
   verifyJWT,
-  todaysAppointments
+  getAllAppointments
 );
 
 router.patch(

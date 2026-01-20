@@ -1,7 +1,9 @@
 import db from '../db/index.js';
 
 export const createPatient=async(first_name,last_name,age,gender,contact_number,address,status)=>{
-    const query=`INSERT INTO patients 
+    const query = `
+    INSERT INTO patients 
+    (first_name,last_name,age,gender,contact_number,address,status)
     VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
     const [rows]=await db.execute(query,[first_name,last_name,age,gender,contact_number,address,status]);

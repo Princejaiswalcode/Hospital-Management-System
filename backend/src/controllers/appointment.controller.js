@@ -1,7 +1,7 @@
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiResponse } from "../utils/ApiResponse";
-import { ApiError } from "../utils/ApiError";
-import {createAppointment, getTodaysAppointments, updateAppointmentStatus} from '../models/appointment.model';
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { ApiError } from "../utils/ApiError.js";
+import {createAppointment, allAppointments, updateAppointmentStatus} from '../models/appointment.model.js';
 
 const createappointment=asyncHandler(async(req,res)=>{
     const {patient_id,doctor_id,appointment_date,appointment_time,appointment_type,status}=req.body;
@@ -20,10 +20,8 @@ const createappointment=asyncHandler(async(req,res)=>{
     )
 })
 
-const todaysAppointments=asyncHandler(async(req,res)=>{
-    const date=new Date();
-    const monthName=date.getMonth()+1;
-    const appointments=await getTodaysAppointments(date,monthName);
+const getAllAppointments=asyncHandler(async(req,res)=>{
+    const appointments=await allAppointments();
 
     return res.status(200).json(
         new ApiResponse(200,appointments,'Apponitments fetched successfully')
@@ -43,8 +41,18 @@ const updateStatus=asyncHandler(async(req,res)=>{
     )
 })
 
+// const todaysAppointments=asyncHandler(async(req,res)=>{
+//     const date=new Date();
+//     const monthName=date.getMonth()+1;
+//     const appointments=await getTodaysAppointments(date,monthName);
+
+//     return res.status(200).json(
+//         new ApiResponse(200,appointments,'Apponitments fetched successfully')
+//     )
+// })
+
 export {
     createappointment,
-    todaysAppointments,
+    getAllAppointments,
     updateStatus
 }

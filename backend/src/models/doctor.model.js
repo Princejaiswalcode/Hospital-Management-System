@@ -6,11 +6,15 @@ export const createDoctor=async(first_name,last_name,specialization,phone_number
         VALUES (?, ?, ?, ?, ?)`;
     
     const doctor=await db.execute(query,[first_name,last_name,specialization,phone_number,email]);
-    return doctor;
+    return doctor.insertId;
 }
 
 export const getDoctorList=async()=>{
-    const query=`SELECT * FROM doctors`;
+    const query=`SELECT id,CONCAT('Dr. ',first_name,' ',last_name) AS name,
+      specialization,
+      phone_number,
+      email
+    FROM doctors`;
 
     const [result]=await db.execute(query);
     return result;

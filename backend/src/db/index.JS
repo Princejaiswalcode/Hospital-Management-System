@@ -1,5 +1,5 @@
 import mysql from 'mysql2/promise'
-import {ApiError} from '../utils/ApiError'
+import {ApiError} from '../utils/ApiError.js'
 import dotenv from 'dotenv';
 
 dotenv.config()
@@ -14,16 +14,21 @@ const db=mysql.createPool({
   queueLimit:0
 })
 
-const connectDB=async()=>{
-  try{
-    const connection=await db.getConnection();
-    console.log(`\n MySQL connected !! DB HOST: ${connectionInstance.connection.host}`)
-    console.log(`${connectionInstance}`)
+export default db;
+
+export const connectDB=async()=>{
+  try {
+    const connection = await db.getConnection()
+
+    console.log(
+      `\n MySQL connected !! DB HOST: ${connection.config.host}`
+    )
+
     connection.release()
-  }catch(error){
-    console.error('MySQL connection error',error)
-    process.exit(1);
+  } catch (error) {
+    console.error('MySQL connection error:', error)
+    process.exit(1)
   }
 }
 
-export default connectDB
+

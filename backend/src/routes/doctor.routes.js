@@ -3,7 +3,7 @@ import {
   createdoctor,
   getListOfDoctors
 } from "../controllers/doctor.controller.js";
-import { verifyJWT } from "../middlewares/verifyJWT.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 

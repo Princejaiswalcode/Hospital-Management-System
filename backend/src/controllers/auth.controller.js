@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import db from "../config/db.js";
+import db from "../db/index.js";
 import{ApiError} from "../utils/ApiError.js";
 import{ApiResponse} from "../utils/ApiResponse.js";
 import{asyncHandler} from "../utils/asyncHandler.js";
@@ -62,4 +62,21 @@ export const loginUser=asyncHandler(async(req,res)=>{
       )
     );
  });
+});
+
+
+export const logoutUser=asyncHandler(async(req, res)=>{
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict"
+  });
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {},
+      "Logout successful"
+    )
+  );
 });
