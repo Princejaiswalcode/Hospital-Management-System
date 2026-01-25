@@ -6,7 +6,7 @@ export const createAppointment=async(patient_id,doctor_id,appointment_date,appoi
         VALUES (?, ?, ?, ?, ?, ?)`;
 
     const [rows]=await db.execute(query,[patient_id,doctor_id,appointment_date,appointment_time,appointment_type,status]);
-    return rows.InsertId;
+    return rows.insertId;
 }
 
 export const allAppointments=async()=>{

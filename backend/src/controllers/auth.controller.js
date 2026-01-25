@@ -50,33 +50,17 @@ export const loginUser=asyncHandler(async(req,res)=>{
     {expiresIn:"1h"}
     );
 
-    return res.status(200).json(
-      new ApiResponse(
-        200,
-       {
-          token,
-          name:user.username,
-          role
-       },
-        "Login successful"
-      )
-    );
+    return res.status(200).json({
+      token,
+      name:user.username,
+      role
+    });
  });
 });
 
 
-export const logoutUser=asyncHandler(async(req, res)=>{
-  res.clearCookie("accessToken", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict"
+export const logoutUser=asyncHandler(async(req,res)=>{
+  return res.status(200).json({
+    message:"Logout successful"
   });
-
-  return res.status(200).json(
-    new ApiResponse(
-      200,
-      {},
-      "Logout successful"
-    )
-  );
 });

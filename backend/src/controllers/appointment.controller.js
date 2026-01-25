@@ -4,19 +4,20 @@ import { ApiError } from "../utils/ApiError.js";
 import {createAppointment, allAppointments, updateAppointmentStatus} from '../models/appointment.model.js';
 
 const createappointment=asyncHandler(async(req,res)=>{
-    const {patient_id,doctor_id,appointment_date,appointment_time,appointment_type,status}=req.body;
+    const {patient_id,doctor_id,date,time,type}=req.body;
 
     if(!patient_id)throw new ApiError(400, "patient_id is required");
     if(!doctor_id)throw new ApiError(400,'doctor id is required');
-    if(!appointment_date)throw new ApiError(400, "appointment_date is required");
-    if(!appointment_time)throw new ApiError(400, "appointment_time is required");
-    if(!appointment_type)throw new ApiError(400, "appointment_type is required");
-    if(!status || !status.trim())throw new ApiError(400, "status is required");
+    if(!date)throw new ApiError(400, "appointment_date is required");
+    if(!time)throw new ApiError(400, "appointment_time is required");
+    if(!type)throw new ApiError(400, "appointment_type is required");
+    
+    const status = "Scheduled";
 
-    const appointment=await createAppointment(patient_id,doctor_id,appointment_date,appointment_time,appointment_type,status);
+    const appointmentId=await createAppointment(patient_id,doctor_id,date,time,type,status);
 
     return res.status(200).json(
-        new ApiResponse(200,appointment,'appoitment created successfully')
+        new ApiResponse(200,appointmentId,'appoitment created successfully')
     )
 })
 
@@ -24,7 +25,7 @@ const getAllAppointments=asyncHandler(async(req,res)=>{
     const appointments=await allAppointments();
 
     return res.status(200).json(
-        new ApiResponse(200,appointments,'Apponitments fetched successfully')
+        new ApiResponse(appointments)
     )
 })
 
