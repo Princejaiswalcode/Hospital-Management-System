@@ -5,27 +5,28 @@ import {
   updatepatient
 } from "../controllers/patient.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import authorizeRoles from "../middlewares/role.middleware.js";
 
 const router=Router();
 
 router.post(
   "/",
   verifyJWT,
-  allowRoles("Admin","Reception","Doctor","Nurse"),
+  authorizeRoles("Admin","Reception","Doctor","Nurse"),
   createpatient
 );
 
 router.get(
   "/",
   verifyJWT,
-  allowRoles("Admin","Reception"),
+  authorizeRoles("Admin","Reception"),
   getPatientList
 );
 
 router.put(
   "/:id",
   verifyJWT,
-  allowRoles("Admin","Reception"),
+  authorizeRoles("Admin","Reception"),
   updatepatient
 );
 

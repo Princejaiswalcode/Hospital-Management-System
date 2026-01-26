@@ -1,6 +1,6 @@
 import{Router}from "express";
-import{verifyJWT}from "../middlewares/auth.middleware.js";
-import{allowRoles}from "../middlewares/role.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+import authorizeRoles from "../middlewares/role.middleware.js";
 import{
   getBills,
   createBill,
@@ -12,21 +12,21 @@ const router=Router();
 router.get(
   "/",
   verifyJWT,
-  allowRoles("Admin","Accounts"),
+  authorizeRoles("Admin","Accounts"),
   getBills
 );
 
 router.post(
   "/",
   verifyJWT,
-  allowRoles("Admin","Accounts"),
+  authorizeRoles("Admin","Accounts"),
   createBill
 );
 
 router.put(
   "/:id/pay",
   verifyJWT,
-  allowRoles("Admin","Accounts"),
+  authorizeRoles("Admin","Accounts"),
   markBillPaid
 );
 

@@ -1,8 +1,30 @@
 import { Router } from "express";
+import {
+  getWardStats,
+  getAdmissions,
+  admitPatient,
+  dischargePatient
+} from "../controllers/ward.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import authorizeRoles from "../middlewares/role.middleware.js";
 
-const router=Router();
+const router = Router();
 
-router.get("/", verifyJWT, getWards);
+router.get("/", verifyJWT, getWardStats);
+router.get("/admissions", verifyJWT, getAdmissions);
+
+router.post(
+  "/admit",
+  verifyJWT,
+  authorizeRoles("Admin"),
+  admitPatient
+);
+
+router.put(
+  "/discharge/:id",
+  verifyJWT,
+  authorizeRoles("Admin"),
+  dischargePatient
+);
 
 export default router;

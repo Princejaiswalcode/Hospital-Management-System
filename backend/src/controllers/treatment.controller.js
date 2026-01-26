@@ -1,18 +1,38 @@
+import {
+  insertTreatment,
+  fetchTreatments
+} from "../models/treatment.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
 
-const createTreatment=asyncHandler(async(req,res)=>{
-    const treatment="await function();"
-    return res(200).json(
-        new ApiResponse(200,treatment,"treatment created succefully")
-    )
-})
+const addTreatment = asyncHandler(async (req, res) => {
+  const { appointment_id, diagnosis, medicines } = req.body;
 
-const getTreatments=asyncHandler(async(req,res)=>{
-    const treatments="await function()"
-    return res.status(200)
-    .json(
-        new ApiResponse(200,treatments,"treatments fected successfully")
-    )
-})
+  if (!appointment_id)
+    throw new ApiError(400, "Appointment is required");
+
+  if (!diagnosis || !medicines)
+    throw new ApiError(400, "Diagnosis and medicines required");
+
+  await insertTreatment(
+    appointment_id,
+    diagnosis,
+    medicines,
+    req.user.id
+  );
+
+  return res.status(201).json({
+    message: "Treatment added successfully"
+  });
+});
+
+const getAllTreatments = asyncHandler(async (_, res) => {
+  const treatments = await fetchTreatments();
+
+  return res.status(200).json(treatments);
+});
+
+export {
+  addTreatment,
+  getAllTreatments
+};

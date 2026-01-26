@@ -4,21 +4,21 @@ import {
   getSalaryHistory
 } from "../controllers/salary.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { allowRoles } from "../middlewares/role.middleware.js";
+import authorizeRoles from "../middlewares/role.middleware.js";
 
 const router=Router();
 
 router.post(
   "/",
   verifyJWT,
-  allowRoles("Admin","Accounts"),
+  authorizeRoles("Admin","Accounts"),
   processSalary
 );
 
 router.get(
   "/history",
   verifyJWT,
-  allowRoles("Admin","Accounts"),
+  authorizeRoles("Admin","Accounts"),
   getSalaryHistory
 );
 
