@@ -4,7 +4,7 @@ import {
   fetchAllBills,
   insertBill,
   updateBillStatus
-} from "../models/billing.model.js";
+} from "../models/billind.model.js"
 
 export const getBills=asyncHandler(async(req,res)=>{
   const bills=await fetchAllBills();

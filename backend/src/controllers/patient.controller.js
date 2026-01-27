@@ -21,7 +21,7 @@ const createpatient=asyncHandler(async(req,res)=>{
   return res.status(201).json({message: "Patient created"});
 })
 
-export const getPatientList=asyncHandler(async(req,res)=>{
+const getPatientList=asyncHandler(async(req,res)=>{
   const patients=await fetchPatients();
   return res.status(200).json(patients);
 });

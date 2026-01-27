@@ -45,6 +45,40 @@ export const adminDashboard=async()=>{
  };
 };
 
+export const doctorDashboard=async(doctorId)=>{
+  const [[{todayAppointments}]]=await db.execute(
+    `SELECT COUNT(*) AS todayAppointments
+    FROM appointments
+    WHERE doctor_id=? AND DATE(appointment_date)=CURDATE()`,
+    [doctorId]
+  );
+
+  const [[{ totalPatients }]]=await db.execute(
+    `SELECT COUNT(DISTINCT patient_id) AS totalPatients
+    FROM appointments
+    WHERE doctor_id=?`,
+    [doctorId]
+  );
+
+  const [upcomingAppointments]=await db.execute(
+    `SELECT CONCAT(p.first_name,' ',p.last_name) AS name, TIME(a.appointment_time) AS time
+    FROM appointments a
+    JOIN patients p ON a.patient_id=p.patient_id
+    WHERE a.doctor_id=? AND DATE(a.appointment_date)=CURDATE()`,
+    [doctorId]
+  );
+
+  return {
+    stats: {
+      todayAppointments,
+      totalPatients
+    },
+    lists: {
+      upcomingAppointments
+    }
+  };
+};
+
 export const nurseDashboard=async()=>{
   const [[{admittedPatients}]]=await db.execute(
     "SELECT COUNT(*)AS admittedPatients FROM admissions WHERE status='Admitted'"
