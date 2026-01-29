@@ -11,14 +11,14 @@ const router=Router();
 router.post(
   "/",
   verifyJWT,
-  authorizeRoles("Admin","Accounts"),
+  authorizeRoles("admin","accounts"),
   processSalary
 );
 
 router.get(
   "/history",
   verifyJWT,
-  authorizeRoles("Admin","Accounts"),
+  authorizeRoles("admin","accounts"),
   getSalaryHistory
 );
 

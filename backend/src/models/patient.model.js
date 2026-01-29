@@ -1,36 +1,74 @@
 import db from "../db/index.js";
 
-export const insertPatient=async(first_name,last_name,age,gender,contact,address,status)=> {
-  const query=`INSERT INTO patients
-   (first_name,last_name,age,gender,contact_number,address,status)
-    VALUES(?, ?, ?, ?, ?, ?, ?)`;
-  await db.execute(query, [first_name,last_name,age,gender,contact,address,status]);
+/* =========================
+   INSERT PATIENT
+========================= */
+export const insertPatient = async (
+  first_name,
+  last_name,
+  date_of_birth,
+  gender,
+  contact,
+  address
+) => {
+  const query = `
+    INSERT INTO patients
+      (first_name, last_name, date_of_birth, gender, phone, address)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+  await db.execute(query, [
+    first_name,
+    last_name,
+    date_of_birth,
+    gender,
+    contact,
+    address
+  ]);
 };
 
-export const fetchPatients=async()=>{
-  const query=`SELECT
+/* =========================
+   FETCH PATIENTS (AGE CALCULATED)
+========================= */
+export const fetchPatients = async () => {
+  const query = `
+    SELECT
       patient_id,
       CONCAT(first_name, ' ', last_name) AS name,
-      age,
+      TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) AS age,
       gender,
-      contact_number AS contact,
-      address,
-      status
+      phone AS contact,
+      address
     FROM patients
-    ORDER BY patient_id DESC`;
-  const [rows]=await db.execute(query);
+    ORDER BY patient_id DESC
+  `;
+  const [rows] = await db.execute(query);
   return rows;
 };
 
-export const modifyPatient=async(patient_id,first_name,last_name,contact,address,status)=>{
-  const query=`UPDATE patients
+/* =========================
+   UPDATE PATIENT
+========================= */
+export const modifyPatient = async (
+  patient_id,
+  first_name,
+  last_name,
+  contact,
+  address
+) => {
+  const query = `
+    UPDATE patients
     SET
-      first_name=?,
-      last_name=?,
-      contact_number=?,
-      address=?,
-      status=?
-    WHERE patient_id=?`;
-  await db.execute(query,[first_name,last_name,contact,address,status,patient_id
+      first_name = ?,
+      last_name = ?,
+      phone = ?,
+      address = ?
+    WHERE patient_id = ?
+  `;
+  await db.execute(query, [
+    first_name,
+    last_name,
+    contact,
+    address,
+    patient_id
   ]);
 };

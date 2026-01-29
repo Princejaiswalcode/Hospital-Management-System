@@ -16,14 +16,14 @@ router.get("/admissions", verifyJWT, getAdmissions);
 router.post(
   "/admit",
   verifyJWT,
-  authorizeRoles("Admin"),
+  authorizeRoles("admin"),
   admitPatient
 );
 
 router.put(
   "/discharge/:id",
   verifyJWT,
-  authorizeRoles("Admin"),
+  authorizeRoles("admin"),
   dischargePatient
 );
 

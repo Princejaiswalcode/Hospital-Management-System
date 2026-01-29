@@ -7,36 +7,39 @@ export const fetchWardStats=async()=>{
       COUNT(a.admission_id) AS occupied
     FROM wards w
     LEFT JOIN admissions a 
-      ON w.ward_id=a.ward_id 
-      AND a.status='Active'
+      ON w.ward_id = a.ward_id 
+      AND a.discharge_date IS NULL
     GROUP BY w.ward_id`;
 
   const [rows]=await db.execute(query);
   return rows;
 };
 
-export const fetchAdmissions=async()=>{
-  const query=`SELECT 
-      CONCAT('#',p.patient_id) AS id,
-      p.name,
+export const fetchAdmissions = async () => {
+  const query = `
+    SELECT 
+      CONCAT('#', p.patient_id) AS id,
+      CONCAT(p.first_name, ' ', p.last_name) AS name,
       w.ward_name AS ward,
-      a.admit_date AS admit,
+      a.admission_date AS admit,
       IFNULL(a.discharge_date,'-') AS discharge,
-      a.status
+      IF(a.discharge_date IS NULL, 'Active', 'Discharged') AS status
     FROM admissions a
-    JOIN patients p ON a.patient_id=p.patient_id
-    JOIN wards w ON a.ward_id=w.ward_id
-    ORDER BY a.admit_date DESC`;
+    JOIN patients p ON a.patient_id = p.patient_id
+    JOIN wards w ON a.ward_id = w.ward_id
+    ORDER BY a.admission_date DESC
+  `;
 
-  const [rows]=await db.execute(query);
+  const [rows] = await db.execute(query);
   return rows;
 };
 
-export const createAdmission=async(patient_id,ward_id,admit_date)=>{
-  const query=`INSERT INTO admissions(patient_id,ward_id,admit_date)
+
+export const createAdmission=async(patient_id,ward_id,admission_date)=>{
+  const query=`INSERT INTO admissions(patient_id,ward_id,admission_date)
     VALUES(?,?,?)`;
 
-  await db.execute(query,[patient_id,ward_id,admit_date]);
+  await db.execute(query,[patient_id,ward_id,admission_date]);
 };
 
 export const dischargeAdmission=async(admission_id)=>{

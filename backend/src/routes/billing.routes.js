@@ -12,21 +12,21 @@ const router=Router();
 router.get(
   "/",
   verifyJWT,
-  authorizeRoles("Admin","Accounts"),
+  authorizeRoles("admin","accounts"),
   getBills
 );
 
 router.post(
   "/",
   verifyJWT,
-  authorizeRoles("Admin","Accounts"),
+  authorizeRoles("admin","accounts"),
   createBill
 );
 
 router.put(
   "/:id/pay",
   verifyJWT,
-  authorizeRoles("Admin","Accounts"),
+  authorizeRoles("admin","accounts"),
   markBillPaid
 );
 

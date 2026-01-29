@@ -12,7 +12,7 @@ const router = Router();
 router.post(
   "/",
   verifyJWT,
-  authorizeRoles("Admin", "Receptionist"),
+  authorizeRoles("admin", "receptionist"),
   createappointment
 );
 
@@ -25,7 +25,7 @@ router.get(
 router.patch(
   "/:id",
   verifyJWT,
-  authorizeRoles("Doctor", "Admin"),
+  authorizeRoles("doctor", "admin"),
   updateStatus
 );
 

@@ -12,7 +12,7 @@ export const fetchAllBills=async()=>{
       b.total_amount AS total,
       DATE(b.bill_date) AS date,
       b.status
-    FROM billing b
+    FROM bills b
     JOIN patients p ON b.patient_id=p.patient_id
     ORDER BY b.bill_date DESC
   `;
@@ -29,7 +29,7 @@ export const insertBill=async(
   total
 )=>{
   const query=`
-    INSERT INTO billing
+    INSERT INTO bills
    (patient_id, consultation_charge, medicine_charge, room_charge, total_amount, status, bill_date)
     VALUES(?, ?, ?, ?, ?, 'Pending', NOW())`;
 
@@ -46,7 +46,7 @@ export const insertBill=async(
 
 export const updateBillStatus=async(bill_id, status)=>{
   const query=`
-    UPDATE billing
+    UPDATE bills
     SET status=?
     WHERE bill_id=?`;
 

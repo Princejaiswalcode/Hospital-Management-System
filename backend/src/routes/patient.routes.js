@@ -12,21 +12,21 @@ const router=Router();
 router.post(
   "/",
   verifyJWT,
-  authorizeRoles("Admin","Reception","Doctor","Nurse"),
+  authorizeRoles("admin","reception","doctor","nurse"),
   createpatient
 );
 
 router.get(
   "/",
   verifyJWT,
-  authorizeRoles("Admin","Reception"),
+  authorizeRoles("admin","reception"),
   getPatientList
 );
 
 router.put(
   "/:id",
   verifyJWT,
-  authorizeRoles("Admin","Reception"),
+  authorizeRoles("admin","reception"),
   updatepatient
 );
 

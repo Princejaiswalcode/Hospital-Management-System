@@ -13,7 +13,7 @@ router.get("/", verifyJWT, getAllTreatments);
 router.post(
   "/",
   verifyJWT,
-  authorizeRoles("Admin", "Doctor"),
+  authorizeRoles("admin", "doctor"),
   addTreatment
 );
 

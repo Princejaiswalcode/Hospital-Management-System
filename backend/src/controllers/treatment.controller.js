@@ -6,19 +6,21 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const addTreatment=asyncHandler(async(req,res)=>{
-  const { appointment_id,diagnosis,medicines }=req.body;
+  const { patient_id,diagnosis,medicines }=req.body;
 
-  if(!appointment_id)
-    throw new ApiError(400,"Appointment is required");
+  if(!patient_id)
+    throw new ApiError(400,"patient is required");
 
   if(!diagnosis || !medicines)
     throw new ApiError(400,"Diagnosis and medicines required");
 
+  const doctor_id = req.user.id;
+
   await insertTreatment(
-    appointment_id,
+    patient_id,
+    doctor_id,//problem
     diagnosis,
-    medicines,
-    req.user.id
+    medicines
   );
 
   return res.status(201).json({

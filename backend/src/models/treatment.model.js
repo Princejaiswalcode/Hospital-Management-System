@@ -6,8 +6,8 @@ export const insertTreatment=async(
   medicines,
   treated_by)=>{
   const query=`INSERT INTO treatments
-   (appointment_id,diagnosis,medicines,treated_by)
-    VALUES(?,?,?,?)`;
+   (patient_id, doctor_id, treatment_date, diagnosis, prescription)
+    VALUES (?, ?, CURDATE(), ?, ?)`
 
   await db.execute(query,[
     appointment_id,
@@ -18,16 +18,17 @@ export const insertTreatment=async(
 };
 
 export const fetchTreatments=async()=>{
-  const query=`SELECT 
-      CONCAT('#',p.patient_id) AS patientId,
-      p.name AS patientName,
+  const query=`SELECT
+      CONCAT('#', p.patient_id) AS patientId,
+      CONCAT(p.first_name,' ',p.last_name) AS patientName,
+      CONCAT(d.first_name,' ',d.last_name) AS doctorName,
       t.diagnosis,
-      t.medicines,
-      DATE(t.created_at) AS date
+      t.prescription,
+      DATE(t.treatment_date) AS date
     FROM treatments t
-    JOIN appointments a ON t.appointment_id=a.appointment_id
-    JOIN patients p ON a.patient_id=p.patient_id
-    ORDER BY t.created_at DESC
+    JOIN patients p ON t.patient_id = p.patient_id
+    JOIN doctors d ON t.doctor_id = d.doctor_id
+    ORDER BY t.treatment_date DESC
   `;
 
   const [rows]=await db.execute(query);
