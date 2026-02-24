@@ -61,9 +61,9 @@ function loadTreatments() {
 function renderTreatments(list) {
   treatmentTable.innerHTML = "";
 
-  if (!list.length) {
+  if (!list || !list.length) {
     treatmentTable.innerHTML =
-      `<tr><td colspan="5" style="text-align:center">No treatments</td></tr>`;
+      `<tr><td colspan="6" style="text-align:center">No treatments</td></tr>`;
     return;
   }
 
@@ -74,6 +74,7 @@ function renderTreatments(list) {
         <td><strong>${t.patient_name}</strong></td>
         <td>${t.diagnosis}</td>
         <td>${t.prescription}</td>
+        <td>${t.doctor_name || "-"}</td>
         <td>${new Date(t.treatment_date).toLocaleDateString("en-IN")}</td>
       </tr>`;
   });

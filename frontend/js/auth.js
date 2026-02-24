@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showToast("success", "Login successful");
 
       setTimeout(() => {
-        window.location.href = "/frontend/html/dashboard.html";
+        window.location.href = "../html/dashboard.html";
       }, 600);
 
     } catch (err) {

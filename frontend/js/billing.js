@@ -77,6 +77,8 @@ function updateTotal() {
 ========================= */
 function loadBills() {
   const token = sessionStorage.getItem("token");
+  const table = document.getElementById("billingTable");
+  table.innerHTML = "";
 
   fetch("http://localhost:5000/api/billing", {
     headers: {
@@ -84,31 +86,34 @@ function loadBills() {
     }
   })
     .then(res => res.json())
-    .then(data => {
-      const table = document.getElementById("billingTable");
-      table.innerHTML = "";
+    .then(response => {
+      const data = response.data;
 
       data.forEach(b => {
         const tr = document.createElement("tr");
+
         tr.innerHTML = `
           <td>#${b.patient_id}</td>
           <td><strong>${b.patient_name}</strong></td>
-          <td>₹${b.consultation}</td>
-          <td>₹${b.medicine}</td>
-          <td>₹${b.room}</td>
-          <td><strong>₹${b.total}</strong></td>
-          <td>${b.date}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td><strong>₹${b.total_amount}</strong></td>
+          <td>${b.bill_date}</td>
           <td>
-            <span class="badge ${b.status.toLowerCase()}">${b.status}</span>
+            <span class="badge ${b.payment_status.toLowerCase()}">
+              ${b.payment_status}
+            </span>
           </td>
           <td>
             ${
-              b.status === "Pending"
-                ? `<a href="#" onclick="markPaid(${b.id})">Mark as Paid</a>`
+              b.payment_status === "Pending"
+                ? `<a href="#" onclick="markPaid(${b.bill_id})">Mark as Paid</a>`
                 : "-"
             }
           </td>
         `;
+
         table.appendChild(tr);
       });
     })
@@ -121,11 +126,17 @@ function loadBills() {
 function createBill() {
   const token = sessionStorage.getItem("token");
 
+  const consultation = Number(document.getElementById("consultationCharge").value);
+  const medicine = Number(document.getElementById("medicineCharge").value);
+  const room = Number(document.getElementById("roomCharge").value);
+
+  const total = consultation + medicine + room;
+
   const payload = {
     patient_id: document.getElementById("patientSelect").value,
-    consultation: document.getElementById("consultationCharge").value,
-    medicine: document.getElementById("medicineCharge").value,
-    room: document.getElementById("roomCharge").value
+    total_amount: total,
+    payment_status: "Pending",
+    bill_date: new Date().toISOString().split("T")[0]
   };
 
   fetch("http://localhost:5000/api/billing", {
@@ -152,7 +163,7 @@ function markPaid(id) {
   const token = sessionStorage.getItem("token");
 
   fetch(`http://localhost:5000/api/billing/${id}/pay`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`
     }

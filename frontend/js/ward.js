@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
   loadUserInfo();
   applyRolePermissions();
   setupFormToggle();
@@ -16,15 +16,23 @@ function loadUserInfo() {
   }
 
   const data = JSON.parse(user);
-  userName.innerText = data.full_name;
-  headerUserName.innerText = data.full_name;
-  userRole.innerText = data.role + " Dashboard";
-  userAvatar.innerText = data.full_name.charAt(0).toUpperCase();
+
+  const userName = document.getElementById("userName");
+  const headerUserName = document.getElementById("headerUserName");
+  const userRole = document.getElementById("userRole");
+  const userAvatar = document.getElementById("userAvatar");
+
+  if (userName) userName.innerText = data.full_name;
+  if (headerUserName) headerUserName.innerText = data.full_name;
+  if (userRole) userRole.innerText = data.role + " Dashboard";
+  if (userAvatar) userAvatar.innerText = data.full_name.charAt(0).toUpperCase();
 }
 /* ROLE BASED UI */
 function applyRolePermissions() {
   const user = JSON.parse(sessionStorage.getItem("user"));
-  if (user.role !== "Admin") {
+  if (!user) return;
+
+  if (user.role.toLowerCase() !== "admin") {
     document.querySelectorAll(".admin-only").forEach(el => el.remove());
   }
 }
@@ -32,46 +40,65 @@ function applyRolePermissions() {
 /* FORM TOGGLE */
 function setupFormToggle() {
   const form = document.getElementById("admitFormCard");
+  const toggleAdmitBtn = document.getElementById("toggleAdmitBtn");
+  const cancelAdmitBtn = document.getElementById("cancelAdmitBtn");
 
-  toggleAdmitBtn.onclick = () => {
+  if (!form || !toggleAdmitBtn || !cancelAdmitBtn) return;
+
+  toggleAdmitBtn.addEventListener("click", () => {
     form.classList.toggle("hidden");
-  };
+  });
 
-  cancelAdmitBtn.onclick = () => {
+  cancelAdmitBtn.addEventListener("click", () => {
     form.classList.add("hidden");
-  };
+  });
 }
 
 /* LOAD WARDS */
-function loadWards() {
-  const mockWards = [
-    { name: "General Ward A", total: 20, occupied: 15 },
-    { name: "General Ward B", total: 20, occupied: 18 },
-    { name: "ICU", total: 10, occupied: 7 },
-    { name: "Private Rooms", total: 15, occupied: 10 }
-  ];
+async function loadWards() {
+  try {
+    const token = sessionStorage.getItem("token");
 
-  const grid = document.getElementById("wardGrid");
-  grid.innerHTML = "";
+    const res = await fetch("http://localhost:5000/api/wards", {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
 
-  mockWards.forEach(w => {
-    const available = w.total - w.occupied;
-    const percent = (w.occupied / w.total) * 100;
+    const result = await res.json();
 
-    const card = document.createElement("div");
-    card.className = "ward-card";
-    card.innerHTML = `
-      <h4>${w.name}</h4>
-      <p>Total: ${w.total} beds</p>
-      <p>Occupied: <span class="red">${w.occupied}</span></p>
-      <p>Available: <span class="green">${available}</span></p>
-      <div class="progress">
-        <div class="progress-bar" style="width:${percent}%"></div>
-      </div>
-    `;
+    if (!result.success) {
+      throw new Error("Failed to load wards");
+    }
 
-    grid.appendChild(card);
-  });
+    const wards = result.data;
+
+    const grid = document.getElementById("wardGrid");
+    grid.innerHTML = "";
+
+    wards.forEach(w => {
+      const occupied = w.total_beds - w.available_beds;
+      const percent = (occupied / w.total_beds) * 100;
+
+      const card = document.createElement("div");
+      card.className = "ward-card";
+      card.innerHTML = `
+        <h4>${w.ward_name}</h4>
+        <p>Total: ${w.total_beds} beds</p>
+        <p>Occupied: <span class="red">${occupied}</span></p>
+        <p>Available: <span class="green">${w.available_beds}</span></p>
+        <div class="progress">
+          <div class="progress-bar" style="width:${percent}%"></div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error(err);
+    Swal.fire("Error", "Failed to load wards", "error");
+  }
 }
 
 /* LOAD ADMISSIONS */
