@@ -1,16 +1,17 @@
 import { Router } from "express";
 import {
   addTreatment,
-  getMyTreatments
+  getMyTreatments,
+  getDoctorTreatments,
+  getAllTreatmentsController
 } from "../controllers/treatment.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-/* Doctor */
 router.post("/", verifyJWT, addTreatment);
-
-/* Patient */
 router.get("/my", verifyJWT, getMyTreatments);
+router.get("/doctor", verifyJWT, getDoctorTreatments);
+router.get("/all", verifyJWT, getAllTreatmentsController);
 
 export default router;

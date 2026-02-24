@@ -17,20 +17,14 @@
     <h2 class="logo">Hospital System</h2>
 
     <nav id="sidebarNav">
-      <a data-page="dashboard" class="nav-link active">Dashboard</a>
-
-      <a data-page="patients" data-role="admin,reception,nurse">Patients</a>
-      <a data-page="appointments" data-role="admin,reception,doctor">Appointments</a>
-      <a data-page="treatments" data-role="admin,doctor,nurse">Treatments</a>
-      <a data-page="wards" data-role="admin,nurse">Wards & Admission</a>
-      <a data-page="billing" data-role="admin,accounts">Billing</a>
-      <a data-page="salary" data-role="admin,accounts">Salary Payments</a>
-
-      <a data-page="profile" data-role="patient,reception">My Profile</a>
-      <a data-page="myAppointments" data-role="patient,doctor">My Appointments</a>
-      <a data-page="myBills" data-role="patient">My Bills</a>
+      <a data-page="dashboard">Dashboard</a>
+      <a data-page="patients">Patients</a>
+      <a data-page="appointments">Appointments</a>
+      <a data-page="treatments" class="active">Treatments</a>
+      <a data-page="wards">Wards & Admission</a>
+      <a data-page="billing">Billing</a>
+      <a data-page="salary">Salary Payments</a>
     </nav>
-
 
     <button class="logout">Logout</button>
   </aside>
@@ -42,7 +36,7 @@
     <header class="header">
       <div>
         <h1>Welcome, <span id="userName">—</span></h1>
-        <p id="userRole">Admin Dashboard</p>
+        <p id="userRole">— Dashboard</p>
       </div>
 
       <div class="user">
@@ -61,7 +55,9 @@
     <div class="card hidden" id="treatmentFormCard">
       <h3>Add Treatment Record</h3>
 
+      <!-- IMPORTANT: IDs MATCH JS EXACTLY -->
       <div class="form-grid">
+
         <div>
           <label>Appointment</label>
           <select id="appointmentSelect">
@@ -71,22 +67,35 @@
 
         <div class="full">
           <label>Diagnosis</label>
-          <textarea id="diagnosis" placeholder="Enter diagnosis details..."></textarea>
+          <textarea
+            id="diagnosis"
+            rows="3"
+            placeholder="Enter diagnosis details..."
+          ></textarea>
         </div>
 
         <div class="full">
           <label>Prescribed Medicines</label>
-          <textarea id="medicines" placeholder="Enter prescribed medicines..."></textarea>
+          <textarea
+            id="medicines"
+            rows="3"
+            placeholder="Enter prescribed medicines..."
+          ></textarea>
         </div>
+
       </div>
 
       <div class="form-actions">
-        <button class="primary-btn" id="saveTreatmentBtn">Save Treatment</button>
-        <button class="secondary-btn" id="cancelTreatmentBtn">Cancel</button>
+        <button type="button" class="primary-btn" id="saveTreatmentBtn">
+          Save Treatment
+        </button>
+        <button type="button" class="secondary-btn" id="cancelTreatmentBtn">
+          Cancel
+        </button>
       </div>
     </div>
 
-    <!-- TABLE -->
+    <!-- TREATMENT TABLE -->
     <div class="card">
       <table class="table">
         <thead>
@@ -95,6 +104,7 @@
             <th>PATIENT NAME</th>
             <th>DIAGNOSIS</th>
             <th>MEDICINES</th>
+            <th>DOCTOR</th>
             <th>DATE</th>
           </tr>
         </thead>
