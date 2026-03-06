@@ -20,8 +20,7 @@
 --
 
 DROP TABLE IF EXISTS `admissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `admissions` (
   `admission_id` int NOT NULL AUTO_INCREMENT,
   `patient_id` int NOT NULL,
@@ -34,21 +33,24 @@ CREATE TABLE `admissions` (
   PRIMARY KEY (`admission_id`),
   KEY `fk_admission_patient` (`patient_id`),
   KEY `fk_admission_ward` (`ward_id`),
-  CONSTRAINT `fk_admission_patient` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_admission_ward` FOREIGN KEY (`ward_id`) REFERENCES `wards` (`ward_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `admissions`
---
+  CONSTRAINT `fk_admission_patient`
+  FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`)
+  ON DELETE CASCADE,
 
-LOCK TABLES `admissions` WRITE;
-/*!40000 ALTER TABLE `admissions` DISABLE KEYS */;
-INSERT INTO `admissions` VALUES (1,1,6,'2026-01-20',NULL,'ICU-01','B2','Cardiac monitoring'),(2,3,7,'2026-01-22','2026-01-25','GW-A-12','A12','Knee injury'),(3,5,8,'2026-01-23',NULL,'PR-05','P5','Observation'),(4,7,9,'2026-01-24','2026-01-26','GW-B-08','B8','Severe headache'),(5,9,10,'2026-01-25',NULL,'GW-A-09','A9','Skin infection');
-/*!40000 ALTER TABLE `admissions` ENABLE KEYS */;
-UNLOCK TABLES;
+  CONSTRAINT `fk_admission_ward`
+  FOREIGN KEY (`ward_id`) REFERENCES `wards` (`ward_id`)
+  ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
+INSERT INTO `admissions`
+(admission_id, patient_id, ward_id, admission_date, discharge_date, room_number, bed_number, reason)
+VALUES
+(1,1,6,'2026-01-20',NULL,'ICU-01','B2','Cardiac monitoring'),
+(2,3,7,'2026-01-22','2026-01-25','GW-A-12','A12','Knee injury'),
+(3,5,8,'2026-01-23',NULL,'PR-05','P5','Observation'),
+(4,7,9,'2026-01-24','2026-01-26','GW-B-08','B8','Severe headache'),
+(5,9,10,'2026-01-25',NULL,'GW-A-09','A9','Skin infection');
 --
 -- Table structure for table `appointments`
 --
@@ -112,13 +114,28 @@ CREATE TABLE `bills` (
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+ALTER TABLE bills
+ADD COLUMN consultation_charge DECIMAL(10,2) DEFAULT 0 AFTER admission_id,
+ADD COLUMN medicine_charge DECIMAL(10,2) DEFAULT 0 AFTER consultation_charge,
+ADD COLUMN room_charge DECIMAL(10,2) DEFAULT 0 AFTER medicine_charge;
+
 --
 -- Dumping data for table `bills`
 --
 
 LOCK TABLES `bills` WRITE;
 /*!40000 ALTER TABLE `bills` DISABLE KEYS */;
-INSERT INTO `bills` VALUES (1,1,11,NULL,NULL,800.00,'Paid','2026-01-10','2026-01-10'),(3,3,13,NULL,1,10500.00,'Pending','2026-01-11',NULL),(4,4,14,2,2,7000.00,'Paid','2026-01-15','2026-01-15'),(5,5,15,NULL,NULL,600.00,'Paid','2026-01-12','2026-01-12'),(6,6,16,3,3,4500.00,'Pending','2026-01-13',NULL),(7,7,17,NULL,NULL,900.00,'Paid','2026-01-14','2026-01-14'),(8,8,18,4,4,18500.00,'Paid','2026-01-18','2026-01-18'),(9,9,19,NULL,NULL,1200.00,'Pending','2026-01-16',NULL),(10,10,20,5,5,24000.00,'Paid','2026-01-17','2026-01-20');
+INSERT INTO bills (bill_id,patient_id,appointment_id,treatment_id,admission_id,consultation_charge,medicine_charge,room_charge,total_amount,payment_status,bill_date,payment_date)
+VALUES
+(1,1,11,NULL,NULL,500,200,100,800,'Paid','2026-01-10','2026-01-10'),
+(3,3,13,NULL,1,500,0,10000,10500,'Pending','2026-01-11',NULL),
+(4,4,14,2,2,700,300,6000,7000,'Paid','2026-01-15','2026-01-15'),
+(5,5,15,NULL,NULL,400,200,0,600,'Paid','2026-01-12','2026-01-12'),
+(6,6,16,3,3,500,500,3500,4500,'Pending','2026-01-13',NULL),
+(7,7,17,NULL,NULL,600,300,0,900,'Paid','2026-01-14','2026-01-14'),
+(8,8,18,4,4,1000,500,17000,18500,'Paid','2026-01-18','2026-01-18'),
+(9,9,19,NULL,NULL,700,500,0,1200,'Pending','2026-01-16',NULL),
+(10,10,20,5,5,1000,3000,20000,24000,'Paid','2026-01-17','2026-01-20');
 /*!40000 ALTER TABLE `bills` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -363,18 +380,30 @@ DROP TABLE IF EXISTS `treatments`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `treatments` (
   `treatment_id` int NOT NULL AUTO_INCREMENT,
+  `appointment_id` int NOT NULL,
   `patient_id` int NOT NULL,
   `doctor_id` int NOT NULL,
   `treatment_date` date NOT NULL,
   `diagnosis` text,
-  `prescription` text,
-  `treatment_cost` decimal(10,2) DEFAULT NULL,
+  `medicines` text,
   `follow_up_date` date DEFAULT NULL,
   PRIMARY KEY (`treatment_id`),
+
+  KEY `fk_treatment_appointment` (`appointment_id`),
   KEY `fk_treatment_patient` (`patient_id`),
   KEY `fk_treatment_doctor` (`doctor_id`),
-  CONSTRAINT `fk_treatment_doctor` FOREIGN KEY (`doctor_id`) REFERENCES `doctors` (`doctor_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_treatment_patient` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`) ON DELETE CASCADE
+
+  CONSTRAINT `fk_treatment_appointment`
+  FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`)
+  ON DELETE CASCADE,
+
+  CONSTRAINT `fk_treatment_patient`
+  FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`)
+  ON DELETE CASCADE,
+
+  CONSTRAINT `fk_treatment_doctor`
+  FOREIGN KEY (`doctor_id`) REFERENCES `doctors` (`doctor_id`)
+  ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -384,8 +413,14 @@ CREATE TABLE `treatments` (
 
 LOCK TABLES `treatments` WRITE;
 /*!40000 ALTER TABLE `treatments` DISABLE KEYS */;
-INSERT INTO `treatments` VALUES (2,4,64,'2026-01-26','Skin Allergy','Antihistamine cream',350.00,NULL),(3,6,61,'2026-01-27','Cardiac Checkup','Beta blockers',1200.00,'2026-02-15'),(4,9,64,'2026-01-29','Dermatitis','Moisturizing lotion',400.00,NULL),(5,3,63,'2026-01-30','Ligament Strain','Physiotherapy',1500.00,'2026-02-20'),(6,1,62,'2026-01-10','Type 2 Diabetes','Metformin 500mg',1200.00,'2026-02-10');
-/*!40000 ALTER TABLE `treatments` ENABLE KEYS */;
+INSERT INTO treatments
+(treatment_id, appointment_id, patient_id, doctor_id, treatment_date, diagnosis, medicines, follow_up_date)
+VALUES
+(2,14,4,64,'2026-01-26','Skin Allergy','Antihistamine cream',NULL),
+(3,16,6,61,'2026-01-27','Cardiac Checkup','Beta blockers','2026-02-15'),
+(4,19,9,64,'2026-01-29','Dermatitis','Moisturizing lotion',NULL),
+(5,13,3,63,'2026-01-30','Ligament Strain','Physiotherapy','2026-02-20'),
+(6,11,1,62,'2026-01-10','Type 2 Diabetes','Metformin 500mg','2026-02-10');/*!40000 ALTER TABLE `treatments` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

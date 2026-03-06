@@ -41,20 +41,35 @@ export const getPatientAdmissions = asyncHandler(async (req, res) => {
    CREATE
 ========================= */
 export const addAdmission = asyncHandler(async (req, res) => {
-  const id = await createAdmission(req.body);
+  const { patient_id, ward_id, admission_date } = req.body;
+
+  if (!patient_id || !ward_id || !admission_date) {
+    throw new ApiError(400, "Patient, ward and admission date are required");
+  }
+
+  const id = await createAdmission({
+    patient_id: Number(patient_id),
+    ward_id: Number(ward_id),
+    admission_date,
+    room_number: req.body.room_number || null,
+    bed_number: req.body.bed_number || null,
+    reason: req.body.reason || null
+  });
+
   res.status(201).json(
     new ApiResponse(201, { admission_id: id }, "Patient admitted")
   );
 });
-
 /* =========================
    DISCHARGE
 ========================= */
 export const discharge = asyncHandler(async (req, res) => {
-  await dischargePatient(req.params.id, req.body.discharge_date);
+  const today = new Date().toISOString().split("T")[0];
+
+  await dischargePatient(req.params.id, today);
+
   res.json(new ApiResponse(200, null, "Patient discharged"));
 });
-
 /* =========================
    DELETE
 ========================= */

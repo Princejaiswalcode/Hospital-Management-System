@@ -11,14 +11,23 @@ export const getAllBills = async () => {
       b.bill_id,
       b.patient_id,
       CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
+
+      b.consultation_charge,
+      b.medicine_charge,
+      b.room_charge,
+
       b.total_amount,
       b.payment_status,
-      b.bill_date,
-      b.payment_date
+
+      DATE_FORMAT(b.bill_date, '%Y-%m-%d') AS bill_date,
+
+      IFNULL(DATE_FORMAT(b.payment_date, '%Y-%m-%d'), NULL) AS payment_date
+
     FROM bills b
     JOIN patients p ON p.patient_id = b.patient_id
     ORDER BY b.bill_date DESC
   `);
+
   return rows;
 };
 
@@ -48,6 +57,9 @@ export const createBill = async (data) => {
     appointment_id,
     treatment_id,
     admission_id,
+    consultation_charge,
+    medicine_charge,
+    room_charge,
     total_amount,
     payment_status,
     bill_date
@@ -56,14 +68,19 @@ export const createBill = async (data) => {
   const [result] = await db.execute(
     `
     INSERT INTO bills
-    (patient_id, appointment_id, treatment_id, admission_id, total_amount, payment_status, bill_date)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    (patient_id, appointment_id, treatment_id, admission_id,
+     consultation_charge, medicine_charge, room_charge,
+     total_amount, payment_status, bill_date)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `,
     [
       patient_id,
       appointment_id || null,
       treatment_id || null,
       admission_id || null,
+      consultation_charge,
+      medicine_charge,
+      room_charge,
       total_amount,
       payment_status,
       bill_date

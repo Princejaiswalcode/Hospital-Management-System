@@ -53,7 +53,6 @@ async function loadDashboardFromAPI(token) {
     const json = await res.json();
     if (!res.ok) throw new Error(json.message);
 
-    console.log("Dashboard API Response:", json.data);
     renderDashboard(json.data);
 
   } catch (err) {

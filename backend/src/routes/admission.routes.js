@@ -11,8 +11,8 @@ import {
 const router = Router();
 
 router.get("/", getAllAdmissions);
-router.get("/:id", getAdmission);
 router.get("/patient/:patientId", getPatientAdmissions);
+router.get("/:id", getAdmission);
 
 router.post("/", addAdmission);
 router.put("/discharge/:id", discharge);

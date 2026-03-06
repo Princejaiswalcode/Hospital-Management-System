@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadUserInfo();
   setupFormActions();
   loadBills();
+  loadPatients();
   setupLogout();
 });
 
@@ -85,24 +86,35 @@ function loadBills() {
       Authorization: `Bearer ${token}`
     }
   })
-    .then(res => res.json())
+    .then(async res => {
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Server error:", text);
+        throw new Error("Server error");
+      }
+      return res.json();
+    })
     .then(response => {
       const data = response.data;
+      if (!data || data.length === 0) {
+        console.warn("No bills found!");
+        return;
+      }
 
-      data.forEach(b => {
+      data.forEach((b, index) => {
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
-          <td>#${b.patient_id}</td>
-          <td><strong>${b.patient_name}</strong></td>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-          <td><strong>₹${b.total_amount}</strong></td>
-          <td>${b.bill_date}</td>
+          <td>#${b.patient_id ?? "-"}</td>
+          <td><strong>${b.patient_name ?? "-"}</strong></td>
+          <td>${b.consultation_charge ?? "-"}</td>
+          <td>${b.medicine_charge ?? "-"}</td>
+          <td>${b.room_charge ?? "-"}</td>
+          <td><strong>₹${b.total_amount ?? "-"}</strong></td>
+          <td>${b.bill_date ?? "-"}</td>
           <td>
-            <span class="badge ${b.payment_status.toLowerCase()}">
-              ${b.payment_status}
+            <span class="badge ${b.payment_status?.toLowerCase() ?? ""}">
+              ${b.payment_status ?? "-"}
             </span>
           </td>
           <td>
@@ -117,9 +129,40 @@ function loadBills() {
         table.appendChild(tr);
       });
     })
-    .catch(() => showToast("error", "Failed to load bills"));
+    .catch(error => {
+      console.error("Billing load error:", error);
+      showToast("error", "Failed to load bills");
+    });
 }
 
+function loadPatients() {
+  const token = sessionStorage.getItem("token");
+  const select = document.getElementById("patientSelect");
+
+  fetch("http://localhost:5000/api/patients", {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+    .then(res => res.json())
+    .then(patients => {
+      if (!patients || patients.length === 0) {
+        console.log("No patients found");
+        return;
+      }
+
+      select.innerHTML = `<option value="">Select Patient</option>`;
+
+      patients.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.patient_id;
+        option.textContent = `${p.first_name} ${p.last_name}`;
+        select.appendChild(option);
+      });
+    })
+    .catch(err => {
+      console.error("Failed to load patients:", err);
+      showToast("error", "Failed to load patients");
+    });
+}
 /* =========================
    CREATE BILL
 ========================= */
@@ -134,6 +177,11 @@ function createBill() {
 
   const payload = {
     patient_id: document.getElementById("patientSelect").value,
+
+    consultation_charge: consultation,
+    medicine_charge: medicine,
+    room_charge: room,
+
     total_amount: total,
     payment_status: "Pending",
     bill_date: new Date().toISOString().split("T")[0]

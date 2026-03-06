@@ -10,7 +10,7 @@ export const createTreatment = async ({
 }) => {
   const [result] = await db.execute(
     `INSERT INTO treatments
-     (appointment_id, patient_id, doctor_id, diagnosis, prescription, treatment_date)
+     (appointment_id, patient_id, doctor_id, diagnosis, medicines, treatment_date)
      VALUES (?, ?, ?, ?, ?, CURDATE())`,
     [appointment_id, patient_id, doctor_id, diagnosis, medicines]
   );
@@ -25,7 +25,7 @@ export const getTreatmentsByPatient = async (patient_id) => {
         t.treatment_id,
         t.treatment_date,
         t.diagnosis,
-        t.prescription,
+        t.medicines,
         CONCAT(d.first_name,' ',d.last_name) AS doctor_name,
         p.patient_id,
         CONCAT(p.first_name,' ',p.last_name) AS patient_name
@@ -47,7 +47,7 @@ export const getTreatmentsByDoctor = async (doctor_id) => {
         t.treatment_id,
         t.treatment_date,
         t.diagnosis,
-        t.prescription,
+        t.medicines,
         p.patient_id,
         CONCAT(p.first_name,' ',p.last_name) AS patient_name,
         CONCAT(d.first_name,' ',d.last_name) AS doctor_name
@@ -69,7 +69,7 @@ export const getAllTreatments = async () => {
         t.treatment_id,
         t.treatment_date,
         t.diagnosis,
-        t.prescription,
+        t.medicines,
         p.patient_id,
         CONCAT(p.first_name,' ',p.last_name) AS patient_name,
         CONCAT(d.first_name,' ',d.last_name) AS doctor_name
