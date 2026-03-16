@@ -99,10 +99,12 @@ export const getMyTreatments = asyncHandler(async (req, res) => {
    ADMIN – ALL TREATMENTS
 ========================= */
 export const getAllTreatmentsController = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") {
+
+  if (!["admin", "nurse"].includes(req.user.role)) {
     throw new ApiError(403, "Forbidden");
   }
 
   const treatments = await getAllTreatments();
+
   res.json(new ApiResponse(200, treatments, "All treatments"));
 });

@@ -4,9 +4,14 @@ window.addEventListener("DOMContentLoaded", () => {
   setupFormToggle();
   setupAdmitHandler();
   loadWards();
-  loadPatients();
   loadAdmissions();
   setupLogout();
+
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+  if (user && user.role.toLowerCase() === "admin") {
+    loadPatients();
+  }
 });
 
 /* ================= USER INFO ================= */
@@ -54,31 +59,45 @@ function setupFormToggle() {
 }
 
 /* ================= LOAD WARDS ================= */
+/* ================= LOAD WARDS ================= */
 async function loadWards() {
   try {
+
     const token = sessionStorage.getItem("token");
 
     const res = await fetch("http://localhost:5000/api/wards", {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
-    const result = await res.json();
-    if (!res.ok || !result.success) throw new Error();
+    if (!res.ok) {
+      throw new Error("API request failed");
+    }
 
-    const wards = result.data;
+    const result = await res.json();
+
+    console.log("Wards API response:", result); // debug
+
+    const wards = result.data || result; // handle both formats
+
     const grid = document.getElementById("wardGrid");
     const wardSelect = document.getElementById("wardSelect");
+
+    if (!grid || !wardSelect) return;
 
     grid.innerHTML = "";
     wardSelect.innerHTML = `<option value="">Select Ward</option>`;
 
     wards.forEach(w => {
+
       const occupied = w.total_beds - w.available_beds;
       const percent = (occupied / w.total_beds) * 100;
 
-      /* Cards */
+      /* Ward card */
       const card = document.createElement("div");
       card.className = "ward-card";
+
       card.innerHTML = `
         <h4>${w.ward_name}</h4>
         <p>Total: ${w.total_beds}</p>
@@ -88,46 +107,66 @@ async function loadWards() {
           <div class="progress-bar" style="width:${percent}%"></div>
         </div>
       `;
+
       grid.appendChild(card);
 
-      /* Dropdown */
+      /* Dropdown option */
       const option = document.createElement("option");
       option.value = w.ward_id;
       option.textContent = `${w.ward_name} (${w.available_beds} beds available)`;
 
-      if (w.available_beds <= 0) option.disabled = true;
+      if (w.available_beds <= 0) {
+        option.disabled = true;
+      }
 
       wardSelect.appendChild(option);
+
     });
 
   } catch (err) {
+
+    console.error("Ward load error:", err);
+
     Swal.fire("Error", "Failed to load wards", "error");
+
   }
 }
 
 /* ================= LOAD PATIENTS ================= */
+/* ================= LOAD PATIENTS ================= */
+/* ================= LOAD PATIENTS ================= */
 async function loadPatients() {
   try {
+
     const token = sessionStorage.getItem("token");
 
     const res = await fetch("http://localhost:5000/api/patients", {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
-    const patients = await res.json();
+    if (!res.ok) {
+      throw new Error("API request failed");
+    }
+
+    const patients = await res.json();   // backend returns ARRAY
 
     const select = document.getElementById("patientSelect");
+
+    if (!select) return;
+
     select.innerHTML = `<option value="">Select Patient</option>`;
 
     patients.forEach(p => {
       const opt = document.createElement("option");
       opt.value = p.patient_id;
-      opt.textContent = p.first_name + " " + p.last_name;
+      opt.textContent = `${p.first_name} ${p.last_name}`;
       select.appendChild(opt);
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("Patient load error:", err);
     Swal.fire("Error", "Failed to load patients", "error");
   }
 }

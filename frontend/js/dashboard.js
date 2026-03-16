@@ -31,53 +31,72 @@ function applyUserInfo(user) {
    ROLE ACCESS
 ================================ */
 function applyRoleAccess(role) {
+  const cleanRole = role.trim().toLowerCase();
+
   document.querySelectorAll("[data-role]").forEach(el => {
-    const allowed = el.dataset.role.split(",");
-    if (!allowed.includes(role)) {
+    const allowedRoles = el.dataset.role
+      .split(",")
+      .map(r => r.trim().toLowerCase());
+
+    if (!allowedRoles.includes(cleanRole)) {
       el.style.display = "none";
     }
   });
 }
+
 
 /* ===============================
    LOAD DASHBOARD
 ================================ */
 async function loadDashboardFromAPI(token) {
   try {
+
     const res = await fetch("http://localhost:5000/api/dashboard", {
       headers: {
-        Authorization: `Bearer ${token}`
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
       }
     });
 
+    if (res.status === 401) {
+      sessionStorage.clear();
+      window.location.href="/frontend/html/login.html";
+      return;
+    }
+
     const json = await res.json();
-    if (!res.ok) throw new Error(json.message);
+
+    if (!res.ok) {
+      throw new Error(json.message || "Dashboard load failed");
+    }
 
     renderDashboard(json.data);
 
   } catch (err) {
-    showToast("error", err.message || "Dashboard load failed");
+    console.error(err);
+    showToast("error","Dashboard load failed");
   }
 }
 
 /* ===============================
    RENDER DASHBOARD
 ================================ */
-function renderDashboard(data) {
-  /* ===== COUNTS (DIRECT FROM API) ===== */
-  setText("totalPatients", data.totalPatients);
-  setText("todayAppointments", data.todayAppointments);
-  setText("admittedPatients", data.admittedPatients);
-  setText("pendingBills", data.pendingBills);
-  setText("treatmentsCompleted", data.treatmentsCompleted);
-  setText("totalBeds", data.totalBeds);
+function renderDashboard(data = {}) {
 
-  /* ===== LISTS ===== */
+  setText("totalPatients", data.totalPatients || 0);
+  setText("todayAppointments", data.todayAppointments || 0);
+  setText("admittedPatients", data.admittedPatients || 0);
+  setText("pendingBills", data.pendingBills || 0);
+  setText("treatmentsCompleted", data.treatmentsCompleted || 0);
+  setText("totalBeds", data.totalBeds || 0);
+
   if (data.lists) {
-    renderRecentPatients(data.lists.recentPatients);
-    renderUpcomingAppointments(data.lists.upcomingAppointments);
-    renderWardOccupancy(data.lists.wardOccupancy);
-    renderRecentBills(data.lists.recentBills);
+
+    renderRecentPatients(data.lists.recentPatients || []);
+    renderUpcomingAppointments(data.lists.upcomingAppointments || []);
+    renderWardOccupancy(data.lists.wardOccupancy || []);
+    renderRecentBills(data.lists.recentBills || []);
+
   }
 }
 
