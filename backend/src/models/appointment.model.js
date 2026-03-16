@@ -31,35 +31,46 @@ export const getAllAppointments = async () => {
 export const getDoctorAppointments = async (doctor_id) => {
   const [rows] = await db.execute(`
     SELECT
-      appointment_id,
-      appointment_date,
-      appointment_time,
-      status,
-      reason,
-      notes
-    FROM appointments
-    WHERE doctor_id = ?
-    ORDER BY appointment_date DESC
+      a.appointment_id,
+      a.patient_id,
+      CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
+      a.doctor_id,
+      CONCAT(d.first_name, ' ', d.last_name) AS doctor_name,
+      a.appointment_date,
+      a.appointment_time,
+      a.status,
+      a.reason,
+      a.notes
+    FROM appointments a
+    JOIN patients p ON p.patient_id = a.patient_id
+    JOIN doctors d ON d.doctor_id = a.doctor_id
+    WHERE a.doctor_id = ?
+    ORDER BY a.appointment_date DESC, a.appointment_time DESC
   `, [doctor_id]);
 
   return rows;
 };
-
 /* =========================
    PATIENT APPOINTMENTS
 ========================= */
 export const getPatientAppointments = async (patient_id) => {
   const [rows] = await db.execute(`
     SELECT
-      appointment_id,
-      appointment_date,
-      appointment_time,
-      status,
-      reason,
-      notes
-    FROM appointments
-    WHERE patient_id = ?
-    ORDER BY appointment_date DESC
+      a.appointment_id,
+      a.patient_id,
+      CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
+      a.doctor_id,
+      CONCAT(d.first_name, ' ', d.last_name) AS doctor_name,
+      a.appointment_date,
+      a.appointment_time,
+      a.status,
+      a.reason,
+      a.notes
+    FROM appointments a
+    JOIN patients p ON p.patient_id = a.patient_id
+    JOIN doctors d ON d.doctor_id = a.doctor_id
+    WHERE a.patient_id = ?
+    ORDER BY a.appointment_date DESC, a.appointment_time DESC
   `, [patient_id]);
 
   return rows;

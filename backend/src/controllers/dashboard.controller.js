@@ -104,10 +104,29 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       [doctorId]
     );
 
+    const [upcomingAppointments] = await db.execute(`
+    SELECT 
+      p.first_name,
+      p.last_name,
+      a.appointment_date,
+      a.appointment_time
+    FROM appointments a
+    LEFT JOIN patients p ON p.patient_id = a.patient_id
+    WHERE a.doctor_id = ?
+    AND a.appointment_date >= CURDATE()
+    AND a.status = 'Scheduled'
+    ORDER BY a.appointment_date, a.appointment_time
+    LIMIT 5
+  `, [doctorId]);
+
     data = {
       todayAppointments: todayAppointments.count,
       totalPatients: totalPatients.count,
       treatmentsCompleted: treatmentsCompleted.count
+    };
+
+    lists = {
+      upcomingAppointments
     };
   }
 
@@ -122,9 +141,18 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       "SELECT SUM(total_beds) AS count FROM wards"
     );
 
+    const [wardOccupancy] = await db.execute(`
+        SELECT ward_name,total_beds,available_beds
+        FROM wards
+    `);
+
     data = {
       admittedPatients: admittedPatients.count,
       totalBeds: totalBeds.count || 0
+    };
+
+    lists = {
+      wardOccupancy
     };
   }
 
@@ -186,7 +214,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     `,[patientId]);
 
     data = {
-      upcomingAppointments: upcomingAppointments.count,
+      todayAppointments: upcomingAppointments.count,
       pendingBills: pendingBills.count
     };
   }
