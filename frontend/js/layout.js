@@ -65,11 +65,26 @@ function setupNavRouting() {
 function highlightActiveNav() {
   const current = window.location.pathname.split("/").pop();
 
+  const pageMap = {
+    dashboard: "dashboard.html",
+    patients: "patient.html",
+    appointments: "appointment.html",
+    treatments: "treatment.html",
+    wards: "ward.html",
+    billing: "billing.html",
+    salary: "salary.html",
+    "patient-profile": "patient_profile.html",
+    "my-appointments": "my-appointments.html",
+    "my-bills": "my-bills.html"
+  };
+
   document.querySelectorAll("#sidebarNav a[data-page]").forEach(link => {
     link.classList.remove("active");
 
     const pageKey = link.dataset.page;
-    if (current.includes(pageKey)) {
+    const pageFile = pageMap[pageKey];
+
+    if (pageFile === current) {
       link.classList.add("active");
     }
   });

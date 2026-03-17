@@ -54,3 +54,9 @@
   cursor: pointer;
   font-weight: 600;
 }
+
+#act{
+  background: #e0e7ff;
+  color: #2563eb;
+  font-weight: bold;
+}

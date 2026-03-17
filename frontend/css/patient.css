@@ -171,3 +171,9 @@
     font-size: 18px;
   }
 }
+
+#act{
+  background: #e0e7ff;
+  color: #2563eb;
+  font-weight: bold;
+}

@@ -33,7 +33,7 @@ textarea:focus {
   display: none;
 }
 
-.sidebarNav nav a.active {
+#act{
   background: #e0e7ff;
   color: #2563eb;
   font-weight: bold;

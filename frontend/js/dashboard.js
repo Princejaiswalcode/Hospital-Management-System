@@ -186,3 +186,24 @@ function setupLogout() {
     };
   }
 }
+
+const navLinks = document.querySelectorAll(".nav-link");
+const pages = document.querySelectorAll(".page");
+
+navLinks.forEach(link => {
+  link.addEventListener("click", () => {
+
+    // Remove active from all links
+    navLinks.forEach(l => l.classList.remove("active"));
+
+    // Add active to clicked link
+    link.classList.add("active");
+
+    // Hide all pages
+    pages.forEach(p => p.classList.remove("active"));
+
+    // Show selected page
+    const pageId = "page-" + link.dataset.page;
+    document.getElementById(pageId)?.classList.add("active");
+  });
+});
