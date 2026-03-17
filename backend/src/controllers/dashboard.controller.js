@@ -201,21 +201,56 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
 
     const patientId = patient.patient_id;
 
-    const [[upcomingAppointments]] = await db.execute(`
+    /* COUNTS */
+    const [[todayAppointmentsCount]] = await db.execute(`
       SELECT COUNT(*) AS count
       FROM appointments
-      WHERE patient_id=? AND appointment_date>=CURDATE()
-    `,[patientId]);
+      WHERE patient_id=? AND appointment_date=CURDATE()
+    `, [patientId]);
 
-    const [[pendingBills]] = await db.execute(`
+    const [[pendingBillsCount]] = await db.execute(`
       SELECT COUNT(*) AS count
       FROM bills
       WHERE patient_id=? AND payment_status='Pending'
-    `,[patientId]);
+    `, [patientId]);
 
     data = {
-      todayAppointments: upcomingAppointments.count,
-      pendingBills: pendingBills.count
+      todayAppointments: todayAppointmentsCount.count,
+      pendingBills: pendingBillsCount.count
+    };
+
+    /* LISTS (IMPORTANT FIX) */
+    const [upcomingAppointments] = await db.execute(`
+      SELECT 
+        p.first_name,
+        p.last_name,
+        a.appointment_date,
+        a.appointment_time
+      FROM appointments a
+      JOIN patients p ON p.patient_id = a.patient_id
+      WHERE a.patient_id = ?
+      AND a.appointment_date >= CURDATE()
+      ORDER BY a.appointment_date, a.appointment_time
+      LIMIT 5
+    `, [patientId]);
+
+    const [recentBills] = await db.execute(`
+      SELECT 
+        p.first_name,
+        p.last_name,
+        b.total_amount,
+        b.payment_status
+      FROM bills b
+      JOIN patients p ON p.patient_id = b.patient_id
+      WHERE b.patient_id = ?
+      ORDER BY b.bill_date DESC
+      LIMIT 5
+    `, [patientId]);
+
+    /* ✅ THIS WAS MISSING */
+    lists = {
+      upcomingAppointments,
+      recentBills
     };
   }
 

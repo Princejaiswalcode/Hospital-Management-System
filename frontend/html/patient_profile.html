@@ -1,14 +1,76 @@
-<section class="page">
-  <h2>My Profile</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <div class="profile-card">
-    <h3 id="name"></h3>
-    <p><b>Age:</b> <span id="age"></span></p>
-    <p><b>Gender:</b> <span id="gender"></span></p>
-    <p><b>Phone:</b> <span id="phone"></span></p>
-    <p><b>Email:</b> <span id="email"></span></p>
-    <p><b>Status:</b> <span id="status"></span></p>
-  </div>
-</section>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script src="/frontend/js/patient-profile.js"></script>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/patient-profile.css" />
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- ✅ SIDEBAR (same as dashboard) -->
+  <aside class="sidebar">
+    <h2 class="logo">Hospital System</h2>
+
+    <nav id="sidebarNav">
+      <a class="nav-link" data-page="dashboard">Dashboard</a>
+      <a class="nav-link" data-page="patients" data-role="admin,reception,nurse">Patients</a>
+      <a class="nav-link" data-page="appointments" data-role="admin,reception,doctor">Appointments</a>
+      <a class="nav-link" data-page="treatments" data-role="admin,doctor,nurse">Treatments</a>
+      <a class="nav-link" data-page="wards" data-role="admin,nurse">Wards</a>
+      <a class="nav-link" data-page="billing" data-role="admin,accounts">Billing</a>
+      <a class="nav-link" data-page="salary" data-role="admin,accounts">Salary</a>
+
+      <!-- ✅ FIXED -->
+      <a class="nav-link active" data-page="patient-profile" data-role="patient,reception">My Profile</a>
+      <a class="nav-link" data-page="my-appointments" data-role="patient,doctor">My Appointments</a>
+      <a class="nav-link" data-page="my-bills" data-role="patient">My Bills</a>
+    </nav>
+
+    <button class="logout">Logout</button>
+  </aside>
+
+  <!-- ✅ MAIN -->
+  <main class="main">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div>
+        <h1>My Profile</h1>
+        <p>Patient Information</p>
+      </div>
+
+      <div class="user-box">
+        <span id="headerUserName"></span>
+        <div id="userAvatar" class="avatar"></div>
+      </div>
+    </header>
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+      <h3 id="name"></h3>
+
+      <div class="profile-grid">
+        <p><b>Age:</b> <span id="age"></span></p>
+        <p><b>Gender:</b> <span id="gender"></span></p>
+        <p><b>Phone:</b> <span id="phone"></span></p>
+        <p><b>Email:</b> <span id="email"></span></p>
+        <p><b>Status:</b> <span id="status"></span></p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/toast.js"></script>
+<script src="../js/layout.js"></script>
+<script src="../js/patient-profile.js"></script>
+
+</body>
+</html>

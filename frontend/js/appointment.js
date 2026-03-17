@@ -123,8 +123,10 @@ function loadAppointments(token) {
   const user = JSON.parse(sessionStorage.getItem("user"));
   let url = "http://localhost:5000/api/appointments";
 
-  if (user.role === "Doctor") url += "/doctor";
-  if (user.role === "Patient") url += "/patient";
+  const role = user.role.toLowerCase();
+
+  if (role === "doctor") url += "/doctor";
+  if (role === "patient") url += "/patient";
 
   fetch(url, {
     headers: { Authorization: `Bearer ${token}` }

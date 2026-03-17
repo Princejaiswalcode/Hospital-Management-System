@@ -1,0 +1,61 @@
+/* Page container */
+
+.page-container {
+  padding: 20px 30px;
+}
+
+/* Page title */
+
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Table card */
+
+.table-container {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+}
+
+/* Table */
+
+.appointments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+/* Header */
+
+.appointments-table thead {
+  background: #f9fafb;
+}
+
+.appointments-table th {
+  text-align: left;
+  padding: 12px;
+  color: #6b7280;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Rows */
+
+.appointments-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.appointments-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* Status text */
+
+.appointments-table td:last-child {
+  font-weight: 500;
+}

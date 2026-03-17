@@ -133,8 +133,6 @@ async function loadWards() {
 }
 
 /* ================= LOAD PATIENTS ================= */
-/* ================= LOAD PATIENTS ================= */
-/* ================= LOAD PATIENTS ================= */
 async function loadPatients() {
   try {
 

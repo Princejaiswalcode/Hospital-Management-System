@@ -120,6 +120,12 @@ function renderUpcomingAppointments(list = []) {
   if (!ul) return;
 
   ul.innerHTML = "";
+
+  if (list.length === 0) {
+    ul.innerHTML = "<li>No upcoming appointments</li>";
+    return;
+  }
+
   list.forEach(a => {
     const li = document.createElement("li");
     li.textContent =

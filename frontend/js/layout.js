@@ -42,9 +42,9 @@ function setupNavRouting() {
     wards: "ward.html",
     billing: "billing.html",
     salary: "salary.html",
-    profile: "profile.html",
-    myAppointments: "my-appointment.html",
-    myBills: "my-bills.html"
+    "patient-profile": "patient_profile.html",
+    "my-appointments": "my-appointments.html",
+    "my-bills": "my-bills.html"
   };
 
   document.querySelectorAll("#sidebarNav a[data-page]").forEach(link => {
