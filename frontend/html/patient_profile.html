@@ -12,9 +12,9 @@
 </head>
 <body>
 
-<div class="app-layout">
+<div class="app"> <!-- ✅ FIXED -->
 
-  <!-- ✅ SIDEBAR (same as dashboard) -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <h2 class="logo">Hospital System</h2>
 
@@ -27,7 +27,6 @@
       <a class="nav-link" data-page="billing" data-role="admin,accounts">Billing</a>
       <a class="nav-link" data-page="salary" data-role="admin,accounts">Salary</a>
 
-      <!-- ✅ FIXED -->
       <a class="nav-link active" data-page="patient-profile" data-role="patient,reception">My Profile</a>
       <a class="nav-link" data-page="my-appointments" data-role="patient,doctor">My Appointments</a>
       <a class="nav-link" data-page="my-bills" data-role="patient">My Bills</a>
@@ -36,7 +35,7 @@
     <button class="logout">Logout</button>
   </aside>
 
-  <!-- ✅ MAIN -->
+  <!-- MAIN -->
   <main class="main">
 
     <!-- HEADER -->
@@ -52,17 +51,57 @@
       </div>
     </header>
 
-    <!-- PROFILE CARD -->
-    <div class="profile-card">
-      <h3 id="name"></h3>
+    <!-- PROFILE -->
+    <div class="profile-container">
 
-      <div class="profile-grid">
-        <p><b>Age:</b> <span id="age"></span></p>
-        <p><b>Gender:</b> <span id="gender"></span></p>
-        <p><b>Phone:</b> <span id="phone"></span></p>
-        <p><b>Email:</b> <span id="email"></span></p>
-        <p><b>Status:</b> <span id="status"></span></p>
+      <!-- TOP -->
+      <div class="profile-header">
+        <div class="profile-avatar" id="avatarLarge">P</div>
+
+        <div>
+          <h2 id="name"></h2>
+          <p>Patient ID: <span id="patientId"></span></p>
+        </div>
       </div>
+
+      <!-- DETAILS -->
+      <div class="profile-details">
+
+        <div class="info-box">
+          <div class="icon blue">👤</div>
+          <div>
+            <p class="label">Personal Information</p>
+            <p><b>Age:</b> <span id="age"></span></p>
+            <p><b>Gender:</b> <span id="gender"></span></p>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="icon green">📞</div>
+          <div>
+            <p class="label">Contact</p>
+            <p id="phone"></p>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="icon purple">📍</div>
+          <div>
+            <p class="label">Address</p>
+            <p id="address"></p>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="icon orange">❤️</div>
+          <div>
+            <p class="label">Current Status</p>
+            <span class="status-badge" id="status"></span>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
   </main>

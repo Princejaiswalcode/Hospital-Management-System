@@ -67,32 +67,26 @@ export const getPatientById = async (id) => {
    GET PATIENT BY USER ID
 ========================= */
 export const getPatientByUserId = async (user_id) => {
-  const [[row]] = await db.execute(
+  const [rows] = await db.execute(
     `
-    SELECT
+    SELECT 
       patient_id,
       first_name,
       last_name,
       gender,
-      date_of_birth,
-      CASE
-        WHEN date_of_birth IS NOT NULL
-        THEN TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE())
-        ELSE NULL
-      END AS age,
+      TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) AS age,
       phone,
       email,
       address,
-      blood_group,
-      emergency_contact,
       status
     FROM patients
     WHERE user_id = ?
+    LIMIT 1
     `,
     [user_id]
   );
 
-  return row;
+  return rows[0]; // ✅ always single correct record
 };
 
 /* =========================

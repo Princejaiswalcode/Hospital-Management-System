@@ -36,6 +36,10 @@ export const fetchPatientById = asyncHandler(async (req, res) => {
    GET LOGGED-IN PATIENT PROFILE
 ========================= */
 export const fetchMyPatientProfile = asyncHandler(async (req, res) => {
+  if (!req.user?.user_id) {
+    throw new ApiError(403, "Unauthorized");
+  }
+
   const patient = await getPatientByUserId(req.user.user_id);
 
   if (!patient) {

@@ -9,10 +9,11 @@ async function loadProfile() {
     return;
   }
 
-  // Header info (same style as dashboard)
-  document.getElementById("headerUserName").innerText = user.full_name;
-  document.getElementById("userAvatar").innerText =
-    user.full_name.charAt(0).toUpperCase();
+  /* ===============================
+     HEADER (ALWAYS FROM SESSION)
+  ================================ */
+  setText("headerUserName", user.full_name);
+  setText("userAvatar", user.full_name?.charAt(0).toUpperCase());
 
   try {
     const res = await fetch("http://localhost:5000/api/patients/me/profile", {
@@ -29,30 +30,84 @@ async function loadProfile() {
 
     const json = await res.json();
 
-    if (!res.ok) throw new Error(json.message || "Failed to load profile");
+    if (!res.ok) {
+      console.error("Backend error:", json);
+      throw new Error(json.message || "Failed to load profile");
+    }
 
-    const p = json; // Directly access the returned object (no 'data' field)
+    /* ===============================
+       HANDLE RESPONSE SAFELY
+    ================================ */
+    const p = json.data || json; // supports both formats
 
-    // Ensure the response has the correct structure before accessing properties
-    if (p) {
-      setText("name", `${p.first_name} ${p.last_name}`);
-      setText("age", p.age); // Assuming 'age' is being calculated or passed directly
-      setText("gender", p.gender === 'M' ? 'Male' : 'Female'); // Display gender
-      setText("phone", p.phone || "-"); // Ensure phone number is available
-      setText("email", p.email || "-"); // Ensure email is available
-      setText("status", p.status || "-"); // Ensure status is available
-    } else {
-      throw new Error("Patient data is missing or malformed");
+    if (!p || !p.first_name) {
+      throw new Error("Invalid profile data");
+    }
+
+    /* ===============================
+       SET PROFILE DATA
+    ================================ */
+
+    // Name
+    const fullName = `${p.first_name} ${p.last_name}`;
+    setText("name", fullName);
+
+    // Avatar (big)
+    setText("avatarLarge", p.first_name.charAt(0).toUpperCase());
+
+    // Patient ID
+    setText("patientId", p.patient_id || user.user_id);
+
+    // Basic Info
+    setText("age", p.age || "-");
+
+    setText(
+      "gender",
+      p.gender === "M"
+        ? "Male"
+        : p.gender === "F"
+        ? "Female"
+        : "-"
+    );
+
+    setText("phone", p.phone || "-");
+    setText("email", p.email || "-");
+    setText("address", p.address || "-");
+
+    /* ===============================
+       STATUS (WITH COLOR FIX)
+    ================================ */
+    const statusEl = document.getElementById("status");
+
+    if (statusEl) {
+      const statusText = p.status || "Unknown";
+      statusEl.innerText = statusText;
+
+      // dynamic colors
+      const s = statusText.toLowerCase();
+
+      if (s.includes("admitted")) {
+        statusEl.style.background = "#fee2e2";
+        statusEl.style.color = "#dc2626";
+      } else if (s.includes("discharged")) {
+        statusEl.style.background = "#dcfce7";
+        statusEl.style.color = "#16a34a";
+      } else {
+        statusEl.style.background = "#e0e7ff";
+        statusEl.style.color = "#1d4ed8";
+      }
     }
 
   } catch (err) {
-    console.error(err);
+    console.error("Profile load error:", err);
     showToast("error", err.message || "Failed to load profile");
   }
 }
 
-/* helper */
+/* ===============================
+   HELPER
+================================ */
 function setText(id, value) {
   const el = document.getElementById(id);
-  if (el) el.innerText = value || "-";
+  if (el) el.innerText = value ?? "-";
 }
