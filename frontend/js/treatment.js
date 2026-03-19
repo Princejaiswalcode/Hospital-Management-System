@@ -219,17 +219,38 @@ function setupFormActions(role) {
 
   if (!addBtn || !cancelBtn || !saveBtn || !formCard) return;
 
+  // ✅ FORCE HIDDEN INIT
+  formCard.classList.add("hidden");
+
+  // ✅ OPEN MODAL
   addBtn.onclick = () => {
     formCard.classList.remove("hidden");
   };
 
+  // ✅ CLOSE BUTTON
   cancelBtn.onclick = () => {
     formCard.classList.add("hidden");
     clearForm();
   };
 
-  saveBtn.onclick = submitTreatment;
+  // ✅ CLICK OUTSIDE CLOSE
+  formCard.onclick = (e) => {
+    if (e.target === formCard) {
+      formCard.classList.add("hidden");
+      clearForm();
+    }
+  };
 
+  // ✅ ESC CLOSE
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      formCard.classList.add("hidden");
+      clearForm();
+    }
+  });
+
+  // ✅ SUBMIT
+  saveBtn.onclick = submitTreatment;
 }
 
 

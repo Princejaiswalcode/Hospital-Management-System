@@ -25,7 +25,7 @@
       <a data-page="billing" data-role="admin,accounts">Billing</a>
       <a data-page="salary" data-role="admin,accounts">Salary Payments</a>
       <a data-page="my-appointments" data-role="patient,doctor">My Appointments</a>
-  </nav>
+    </nav>
 
     <button class="logout">Logout</button>
   </aside>
@@ -52,55 +52,58 @@
       <button class="primary-btn" id="addTreatmentBtn">+ Add Treatment</button>
     </div>
 
-    <!-- ADD TREATMENT FORM -->
-    <div class="card hidden" id="treatmentFormCard">
-      <h3>Add Treatment Record</h3>
+    <!-- ✅ MODAL FORM -->
+    <div id="treatmentFormCard" class="hidden">
+      <div class="form-container">
 
-      <!-- IMPORTANT: IDs MATCH JS EXACTLY -->
-      <div class="form-grid">
+        <h3>Add Treatment Record</h3>
 
-        <div>
-          <label>Appointment</label>
-          <select id="appointmentSelect">
-            <option value="">Select Appointment</option>
-          </select>
+        <div class="form-grid">
+
+          <div>
+            <label>Appointment</label>
+            <select id="appointmentSelect">
+              <option value="">Select Appointment</option>
+            </select>
+          </div>
+
+          <!-- Only for admins -->
+          <div id="doctorSelectContainer" class="hidden">
+            <label>Assign Doctor</label>
+            <select id="doctorSelect">
+              <option value="">Select Doctor</option>
+            </select>
+          </div>
+
+          <div class="full">
+            <label>Diagnosis</label>
+            <textarea
+              id="diagnosis"
+              rows="3"
+              placeholder="Enter diagnosis details..."
+            ></textarea>
+          </div>
+
+          <div class="full">
+            <label>Prescribed Medicines</label>
+            <textarea
+              id="medicines"
+              rows="3"
+              placeholder="Enter prescribed medicines..."
+            ></textarea>
+          </div>
+
         </div>
 
-        <!-- Only for admins -->
-        <div id="doctorSelectContainer" class="hidden">
-          <label>Assign Doctor</label>
-          <select id="doctorSelect">
-            <option value="">Select Doctor</option>
-          </select>
+        <div class="form-actions">
+          <button type="button" class="primary-btn" id="saveTreatmentBtn">
+            Save Treatment
+          </button>
+          <button type="button" class="secondary-btn" id="cancelTreatmentBtn">
+            Cancel
+          </button>
         </div>
 
-        <div class="full">
-          <label>Diagnosis</label>
-          <textarea
-            id="diagnosis"
-            rows="3"
-            placeholder="Enter diagnosis details..."
-          ></textarea>
-        </div>
-
-        <div class="full">
-          <label>Prescribed Medicines</label>
-          <textarea
-            id="medicines"
-            rows="3"
-            placeholder="Enter prescribed medicines..."
-          ></textarea>
-        </div>
-
-      </div>
-
-      <div class="form-actions">
-        <button type="button" class="primary-btn" id="saveTreatmentBtn">
-          Save Treatment
-        </button>
-        <button type="button" class="secondary-btn" id="cancelTreatmentBtn">
-          Cancel
-        </button>
       </div>
     </div>
 
@@ -117,9 +120,7 @@
             <th>DATE</th>
           </tr>
         </thead>
-        <tbody id="treatmentTable">
-          <!-- Injected by JS -->
-        </tbody>
+        <tbody id="treatmentTable"></tbody>
       </table>
     </div>
 

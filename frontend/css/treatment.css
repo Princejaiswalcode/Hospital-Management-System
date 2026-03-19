@@ -1,3 +1,4 @@
+/* ================= TEXTAREA ================= */
 textarea {
   width: 100%;
   min-height: 90px;
@@ -12,6 +13,7 @@ textarea:focus {
   outline: none;
 }
 
+/* ================= FORM GRID ================= */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -29,12 +31,87 @@ textarea:focus {
   margin-top: 20px;
 }
 
+/* ================= MODAL BACKDROP ================= */
+#treatmentFormCard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999;
+}
+
+/* ✅ ONLY SHOW WHEN NOT HIDDEN */
+#treatmentFormCard:not(.hidden) {
+  display: flex;
+}
+
 .hidden {
   display: none;
 }
 
-#act{
+/* ================= FORM BOX ================= */
+.form-container {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  width: 600px;
+  max-width: 90%;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+  animation: fadeIn 0.25s ease;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fadeIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ================= HIDDEN ================= */
+.hidden {
+  display: none;
+}
+
+/* ================= ACTIVE SIDEBAR ================= */
+#act {
   background: #e0e7ff;
   color: #2563eb;
   font-weight: bold;
+}
+#treatmentFormCard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* ✅ SHOW ONLY WHEN ACTIVE */
+#treatmentFormCard:not(.hidden) {
+  display: flex;
+}
+.hidden {
+  display: none;
 }
