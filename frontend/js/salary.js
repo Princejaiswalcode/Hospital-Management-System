@@ -7,6 +7,16 @@ document.addEventListener("DOMContentLoaded", () => {
   setupLogout();
 });
 
+/* =========================
+   HELPER: AUTH HEADER
+========================= */
+function authHeader() {
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+  };
+}
+
 /* USER INFO */
 function loadUserInfo() {
   const user = sessionStorage.getItem("user");
@@ -21,12 +31,12 @@ function loadUserInfo() {
   userRole.innerText = data.role + " Dashboard";
   userAvatar.innerText = data.full_name.charAt(0).toUpperCase();
 }
-/* ROLE BASED ACCESS */
+
+/* ROLE ACCESS */
 function applyRoleAccess() {
   const user = JSON.parse(sessionStorage.getItem("user"));
 
-  // ONLY ADMIN & ACCOUNTS CAN PROCESS SALARY
-  if (!["Admin", "Accounts"].includes(user.role)) {
+  if (!["admin", "accounts"].includes(user.role.toLowerCase())) {
     document.getElementById("toggleSalaryForm").style.display = "none";
     document.getElementById("salaryForm").style.display = "none";
   }
@@ -34,37 +44,47 @@ function applyRoleAccess() {
 
 /* FORM TOGGLE */
 function setupFormToggle() {
-  toggleSalaryForm.onclick = () => {
-    salaryForm.classList.toggle("hidden");
+  const openBtn = document.getElementById("toggleSalaryForm");
+  const form = document.getElementById("salaryForm");
+  const cancelBtn = document.getElementById("cancelSalaryForm");
+
+  form.classList.add("hidden");
+
+  openBtn.onclick = () => {
+    form.classList.remove("hidden");
   };
 
-  cancelSalaryForm.onclick = () => {
-    salaryForm.classList.add("hidden");
+  cancelBtn.onclick = () => {
+    form.classList.add("hidden");
+  };
+
+  form.onclick = (e) => {
+    if (e.target === form) {
+      form.classList.add("hidden");
+    }
   };
 }
 
-/* LOAD STAFF CARDS */
+/* LOAD STAFF */
 function loadStaff() {
-  // Backend-ready
-  // fetch("http://localhost:5000/api/staff")
-
-  const staff = [
-    {
-      id: 1,
-      name: "Dr. Arun Mehta",
-      role: "Doctor",
-      salary: 80000,
-      specialization: "Cardiology",
-      contact: "+91-98765-00201",
-    },
-    {
-      id: 2,
-      name: "Nurse Kavita Singh",
-      role: "Nurse",
-      salary: 35000,
-      contact: "+91-98765-00202",
-    },
-  ];
+  const staffCards = document.getElementById("staffCards");
+  const staffSelect = document.getElementById("staffSelect");
+const staff = [
+  {
+    id: 61,
+    name: "Dr. Arun Mehta",
+    role: "Doctor",
+    type: "doctor",
+    salary: 80000
+  },
+  {
+    id: 21, // ✅ CORRECT nurse_id from DB
+    name: "Kavita Singh",
+    role: "Nurse",
+    type: "nurse",
+    salary: 35000
+  }
+];
 
   staffCards.innerHTML = "";
   staffSelect.innerHTML = `<option value="">Select Staff</option>`;
@@ -81,56 +101,112 @@ function loadStaff() {
       </div>
     `;
 
+    // 🔥 IMPORTANT: store type
     staffSelect.innerHTML += `
-      <option value="${s.id}">${s.name}</option>
+      <option value="${s.id}" data-type="${s.type}">
+        ${s.name}
+      </option>
     `;
   });
 }
 
 /* LOAD SALARY HISTORY */
 function loadSalaryHistory() {
-  // Backend-ready
-  // fetch("http://localhost:5000/api/salary/history")
+  const salaryTable = document.getElementById("salaryTable");
 
-  const history = [
-    {
-      staff: "Dr. Arun Mehta",
-      amount: 80000,
-      date: "2026-01-01",
-      status: "Paid",
-    },
-  ];
+  fetch("http://localhost:5000/api/salary", {
+    headers: authHeader()
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    })
+    .then(res => {
+      const data = res.data;
 
-  salaryTable.innerHTML = "";
+      salaryTable.innerHTML = "";
 
-  history.forEach(h => {
-    salaryTable.innerHTML += `
-      <tr>
-        <td><strong>${h.staff}</strong></td>
-        <td>₹${h.amount.toLocaleString()}</td>
-        <td>${h.date}</td>
-        <td>
-          <span class="badge paid">${h.status}</span>
-        </td>
-      </tr>
-    `;
-  });
+      if (!data || data.length === 0) {
+        salaryTable.innerHTML = `<tr><td colspan="4">No records found</td></tr>`;
+        return;
+      }
+
+      data.forEach(h => {
+        salaryTable.innerHTML += `
+          <tr>
+            <td><strong>${h.employee_name}</strong></td>
+            <td>₹${Number(h.amount).toLocaleString()}</td>
+            <td>${new Date(h.payment_date).toLocaleDateString()}</td>
+            <td><span class="badge paid">Paid</span></td>
+          </tr>
+        `;
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      showToast("error", "Failed to load salary history");
+    });
 }
 
 /* PROCESS SALARY */
-processSalaryBtn.onclick = () => {
-  if (!staffSelect.value || !salaryAmount.value || !paymentDate.value) {
-    showToast("error", "Please fill all fields");
+document.getElementById("processSalaryBtn").onclick = () => {
+  const staffSelect = document.getElementById("staffSelect");
+  const salaryAmount = document.getElementById("salaryAmount");
+  const paymentDate = document.getElementById("paymentDate");
+  const form = document.getElementById("salaryForm");
+
+  const selectedOption = staffSelect.selectedOptions[0];
+  const employee_type = selectedOption?.dataset.type;
+
+  const amount = Math.max(0, Number(salaryAmount.value) || 0);
+
+  if (!staffSelect.value || !employee_type || amount <= 0 || !paymentDate.value) {
+    showToast("error", "Please fill all fields correctly");
     return;
   }
 
-  // Backend-ready POST
-  // fetch("http://localhost:5000/api/salary", { method: "POST", body: ... })
+  const payload = {
+    employee_id: staffSelect.value,
+    employee_type: employee_type, // ✅ FIXED
+    amount: amount,
+    payment_date: paymentDate.value,
+    payment_month: new Date(paymentDate.value).getMonth() + 1,
+    payment_year: new Date(paymentDate.value).getFullYear(),
+    payment_method: "cash"
+  };
 
-  showToast("success", "Salary payment processed");
-  salaryForm.classList.add("hidden");
-  loadSalaryHistory();
+  fetch("http://localhost:5000/api/salary", {
+    method: "POST",
+    headers: authHeader(),
+    body: JSON.stringify(payload)
+  })
+    .then(res => {
+      if (!res.ok) throw new Error();
+
+      showToast("success", "Salary payment processed");
+
+      form.classList.add("hidden");
+
+      salaryAmount.value = "";
+      staffSelect.value = "";
+      paymentDate.value = "";
+
+      loadSalaryHistory();
+    })
+    .catch(() => {
+      showToast("error", "Failed to process salary");
+    });
 };
+
+/* INPUT CLEANING */
+document.getElementById("salaryAmount").addEventListener("input", (e) => {
+  let value = e.target.value;
+
+  if (value < 0) value = 0;
+  value = value.replace(/^0+/, "");
+
+  e.target.value = value;
+});
 
 /* LOGOUT */
 function setupLogout() {

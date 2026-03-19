@@ -25,12 +25,7 @@
       <a data-page="wards" data-role="admin,nurse">Wards & Admission</a>
       <a data-page="billing" data-role="admin,accounts">Billing</a>
       <a id="act" data-page="salary" data-role="admin,accounts">Salary Payments</a>
-
-      <a data-page="profile" data-role="patient,reception">My Profile</a>
-      <a data-page="myAppointments" data-role="patient,doctor">My Appointments</a>
-      <a data-page="myBills" data-role="patient">My Bills</a>
     </nav>
-
 
     <button class="logout">Logout</button>
   </aside>
@@ -54,50 +49,51 @@
     <!-- PAGE TITLE -->
     <div class="page-title">
       <h2>Salary Payment Management</h2>
-      <button class="primary-btn" id="toggleSalaryForm">
+      <button type="button" class="primary-btn" id="toggleSalaryForm">
         + Process Payment
       </button>
     </div>
 
     <!-- STAFF CARDS -->
-    <div class="card-grid" id="staffCards">
-      <!-- Injected by JS -->
-    </div>
+    <div class="card-grid" id="staffCards"></div>
 
-    <!-- PROCESS SALARY FORM -->
-    <div class="card hidden" id="salaryForm">
-      <h3>Process Salary Payment</h3>
+    <!-- ✅ MODAL FORM (FIXED STRUCTURE) -->
+    <div id="salaryForm" class="hidden">
+      <div class="card">
+        <h3>Process Salary Payment</h3>
 
-      <div class="form-row">
-        <div>
-          <label>Staff Member</label>
-          <select id="staffSelect">
-            <option value="">Select Staff</option>
-          </select>
+        <div class="form-row">
+          <div>
+            <label>Staff Member</label>
+            <select id="staffSelect">
+              <option value="">Select Staff</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Payment Amount</label>
+            <input type="number" id="salaryAmount" value="0" min="0" />
+          </div>
+
+          <div>
+            <label>Payment Date</label>
+            <input type="date" id="paymentDate" />
+          </div>
         </div>
 
-        <div>
-          <label>Payment Amount</label>
-          <input type="number" id="salaryAmount" value="0" />
-        </div>
-
-        <div>
-          <label>Payment Date</label>
-          <input type="date" id="paymentDate" />
+        <div class="form-actions">
+          <button type="button" class="primary-btn" id="processSalaryBtn">
+            Process Payment
+          </button>
+          <button type="button" class="secondary-btn" id="cancelSalaryForm">
+            Cancel
+          </button>
         </div>
       </div>
-
-      <div class="form-actions">
-        <button class="primary-btn" id="processSalaryBtn">
-          Process Payment
-        </button>
-        <button class="secondary-btn" id="cancelSalaryForm">
-          Cancel
-        </button>
-      </div>
     </div>
+    <!-- ✅ END MODAL -->
 
-    <!-- PAYMENT HISTORY -->
+    <!-- HISTORY -->
     <div class="card">
       <h3>Payment History</h3>
 
@@ -110,9 +106,7 @@
             <th>STATUS</th>
           </tr>
         </thead>
-        <tbody id="salaryTable">
-          <!-- Injected by JS -->
-        </tbody>
+        <tbody id="salaryTable"></tbody>
       </table>
     </div>
 

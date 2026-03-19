@@ -10,5 +10,4 @@ const router = Router();
 router.get("/", fetchAllSalaryPayments);
 router.get("/employee/:employee_id", fetchSalaryByEmployee);
 router.post("/", addSalaryPayment);
-
 export default router;
