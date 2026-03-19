@@ -46,18 +46,32 @@ export const getPatientAppointmentsController = asyncHandler(async (req, res) =>
    CREATE APPOINTMENT
 ========================= */
 export const createAppointmentController = asyncHandler(async (req, res) => {
-  const {
+  let {
     patient_id,
     doctor_id,
     appointment_date,
-    appointment_time
+    appointment_time,
+    reason,
+    notes
   } = req.body;
+
+  // ✅ AUTO-FIX patient_id (prevents wrong user / n+1 bug)
+  if (!patient_id && req.user?.patient_id) {
+    patient_id = req.user.patient_id;
+  }
 
   if (!patient_id || !doctor_id || !appointment_date || !appointment_time) {
     throw new ApiError(400, "Missing required fields");
   }
 
-  const id = await createAppointment(req.body);
+  const id = await createAppointment({
+    patient_id,
+    doctor_id,
+    appointment_date,
+    appointment_time,
+    reason: reason || null,
+    notes: notes || null
+  });
 
   res.status(201).json(
     new ApiResponse(201, { appointment_id: id }, "Appointment created")

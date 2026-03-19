@@ -89,13 +89,24 @@ export const createAppointment = async (data) => {
     notes
   } = data;
 
+  // ✅ FIX: prevent undefined (VERY IMPORTANT)
+  const safeReason = reason || null;
+  const safeNotes = notes || null;
+
   const [result] = await db.execute(
     `
     INSERT INTO appointments
       (patient_id, doctor_id, appointment_date, appointment_time, status, reason, notes)
     VALUES (?, ?, ?, ?, 'Scheduled', ?, ?)
     `,
-    [patient_id, doctor_id, appointment_date, appointment_time, reason, notes]
+    [
+      patient_id,
+      doctor_id,
+      appointment_date,
+      appointment_time,
+      safeReason,
+      safeNotes
+    ]
   );
 
   return result.insertId;
