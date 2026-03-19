@@ -1,184 +1,123 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+/* =========================
+   SUMMARY CARDS
+========================= */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 20px 0;
 }
 
-body {
-  background: #f7f9fc;
-}
-
-/* ===== Layout ===== */
-.app-layout {
-  display: flex;
-  min-height: 100vh;
-}
-
-/* ===== SIDEBAR ===== */
-.sidebar {
-  width: 240px;
+.card {
   background: #fff;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid #eee;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  transition: 0.2s;
 }
 
-.logo {
-  color: #2563eb;
-  margin-bottom: 30px;
-  font-size: 24px;
-  font-weight: bold;
+.card:hover {
+  transform: translateY(-2px);
 }
 
-.sidebar nav a {
-  display: block;
-  padding: 12px;
-  margin-bottom: 10px;
-  text-decoration: none;
-  color: #333;
-  border-radius: 6px;
+.card p {
+  color: #6b7280;
+  font-size: 14px;
 }
 
-.sidebar nav a:hover {
-  background-color: #f0f5ff;
+.card h2 {
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 700;
 }
 
-.sidebar nav a.active {
-  background: #e0e7ff;
-  color: #2563eb;
-  font-weight: bold;
-}
+.green { color: #16a34a; }
+.red { color: #ea580c; }
 
-.logout {
-  margin-top: auto;
-  background: none;
-  border: none;
-  color: red;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-/* ===== MAIN ===== */
-.main {
-  flex: 1;
-  padding: 25px;
-  background-color: #f7f9fc;
-  overflow-y: auto;
-  min-height: 100vh;
-}
-
-/* ===== HEADER ===== */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-.avatar {
-  background: #2563eb;
-  color: #fff;
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-}
-
-/* ===== PAGE ===== */
-.page {
+/* =========================
+   TABLE CARD
+========================= */
+.table-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
   margin-top: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
 }
 
-.page h2 {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-/* ===== TABLE ===== */
+/* =========================
+   TABLE
+========================= */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  table-layout: fixed;
 }
 
-table thead {
-  background-color: #f3f4f6;
+thead {
+  background: #f3f4f6;
 }
 
-table th,
-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-  word-wrap: break-word;
-}
-
-table th {
-  font-weight: 600;
-  color: #555;
-}
-
-table td {
-  color: #777;
-}
-
-table tbody tr:hover {
-  background-color: #f9fafb;
-  cursor: pointer;
-}
-
-/* ===== COMMON UI ===== */
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-}
-
-.primary-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.badge {
-  padding: 6px 12px;
-  border-radius: 20px;
+th {
+  padding: 14px;
   font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+  text-align: left;
+}
+
+td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #374151;
+}
+
+tbody tr:hover {
+  background: #fafafa;
+}
+
+/* =========================
+   BADGES
+========================= */
+.badge {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.paid {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.badge.pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+/* =========================
+   REMINDER BOX
+========================= */
+.reminder {
+  margin-top: 25px;
+  padding: 18px;
+  border-radius: 12px;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  font-size: 14px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+td:nth-child(5) {
   font-weight: bold;
-}
-
-/* ===== FORM ===== */
-input,
-select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  outline: none;
-}
-
-input:focus,
-select:focus {
-  border-color: #2563eb;
-}
-
-/* ===== BILLING FORM ===== */
-.billing-form {
-  display: none;
-}
-
-.billing-form.show {
-  display: block;
 }

@@ -13,24 +13,17 @@
 
 <body>
 
-<div class="app-layout">
+<div class="app">
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <h2 class="logo">Hospital System</h2>
 
     <nav id="sidebarNav">
-      <a class="nav-link" data-page="dashboard">Dashboard</a>
-      <a class="nav-link" data-page="patients" data-role="admin,reception,nurse">Patients</a>
-      <a class="nav-link" data-page="appointments" data-role="admin,reception,doctor">Appointments</a>
-      <a class="nav-link" data-page="treatments" data-role="admin,doctor,nurse">Treatments</a>
-      <a class="nav-link" data-page="wards" data-role="admin,nurse">Wards</a>
-      <a class="nav-link" data-page="billing" data-role="admin,accounts">Billing</a>
-      <a class="nav-link" data-page="salary" data-role="admin,accounts">Salary</a>
-
-      <a class="nav-link" data-page="patient-profile" data-role="patient,reception">My Profile</a>
-      <a class="nav-link" data-page="my-appointments" data-role="patient,doctor">My Appointments</a>
-      <a class="nav-link active" data-page="my-bills" data-role="patient">My Bills</a>
+      <a class="nav-link" href="dashboard.html">Dashboard</a>
+      <a class="nav-link" href="patient-profile.html">My Profile</a>
+      <a class="nav-link" href="my-appointments.html">My Appointments</a>
+      <a class="nav-link active" href="my-bills.html">My Bills</a>
     </nav>
 
     <button class="logout">Logout</button>
@@ -42,29 +35,56 @@
     <!-- HEADER -->
     <header class="header">
       <div>
-        <div id="welcomeText"></div>
-        <div id="headerUserName"></div>
-        <div id="userRole"></div>
+        <h1 id="welcomeText">Welcome</h1>
+        <p id="userRole">Dashboard</p>
       </div>
-      <div id="userAvatar" class="avatar"></div>
+
+      <div class="user-box">
+        <span id="headerUserName"></span>
+        <div id="userAvatar" class="avatar"></div>
+      </div>
     </header>
 
-    <!-- BILLS SECTION -->
-    <section class="page active">
-      <h2>My Bills</h2>
+    <!-- SUMMARY CARDS -->
+    <section class="summary-grid">
+      <div class="card">
+        <p>Total Amount</p>
+        <h2 id="totalAmount">₹0</h2>
+      </div>
 
+      <div class="card">
+        <p>Paid Amount</p>
+        <h2 class="green" id="paidAmount">₹0</h2>
+      </div>
+
+      <div class="card">
+        <p>Pending Amount</p>
+        <h2 class="red" id="pendingAmount">₹0</h2>
+      </div>
+    </section>
+
+    <!-- TABLE -->
+    <section class="table-card">
       <table>
         <thead>
           <tr>
-            <th>Bill ID</th>
+            <th>Bill Date</th>
+            <th>Consultation</th>
+            <th>Medicine</th>
+            <th>Room</th>
             <th>Total</th>
             <th>Status</th>
-            <th>Date</th>
           </tr>
         </thead>
-        <tbody id="bills"></tbody>
+
+        <tbody id="bills">
+          <!-- Dynamic data -->
+        </tbody>
       </table>
     </section>
+
+    <!-- REMINDER -->
+    <section class="reminder" id="reminderBox" style="display:none;"></section>
 
   </main>
 </div>
