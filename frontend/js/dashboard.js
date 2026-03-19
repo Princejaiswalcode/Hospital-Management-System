@@ -83,7 +83,7 @@ async function loadDashboardFromAPI(token) {
 ================================ */
 function renderDashboard(data = {}) {
 
-  setText("totalPatients", data.totalPatients || 0);
+  setText("totalPatients", (data.totalPatients || 0).toLocaleString());
   setText("todayAppointments", data.todayAppointments || 0);
   setText("admittedPatients", data.admittedPatients || 0);
   setText("pendingBills", data.pendingBills || 0);
@@ -104,33 +104,57 @@ function renderDashboard(data = {}) {
    LIST RENDERERS
 ================================ */
 function renderRecentPatients(list = []) {
-  const ul = document.getElementById("recentPatients");
-  if (!ul) return;
+  const container = document.getElementById("recentPatients");
+  if (!container) return;
 
-  ul.innerHTML = "";
+  container.innerHTML = "";
+
   list.forEach(p => {
-    const li = document.createElement("li");
-    li.textContent = `${p.first_name} ${p.last_name}`;
-    ul.appendChild(li);
+    const div = document.createElement("div");
+    div.className = "list-item";
+
+    const statusClass = (p.status || "").toLowerCase();
+
+    div.innerHTML = `
+      <div class="list-info">
+        <div class="list-title">${p.first_name} ${p.last_name}</div>
+        <div class="list-sub">
+          ID: #${p.patient_id} • ${p.age} yrs • ${p.gender}
+        </div>
+      </div>
+
+      <span class="status ${statusClass}">
+        ${p.status || ""}
+      </span>
+    `;
+
+    container.appendChild(div);
   });
 }
 
 function renderUpcomingAppointments(list = []) {
-  const ul = document.getElementById("upcomingAppointments");
-  if (!ul) return;
+  const container = document.getElementById("upcomingAppointments");
+  if (!container) return;
 
-  ul.innerHTML = "";
-
-  if (list.length === 0) {
-    ul.innerHTML = "<li>No upcoming appointments</li>";
-    return;
-  }
+  container.innerHTML = "";
 
   list.forEach(a => {
-    const li = document.createElement("li");
-    li.textContent =
-      `${a.first_name} ${a.last_name} – ${a.appointment_date} ${a.appointment_time}`;
-    ul.appendChild(li);
+    const div = document.createElement("div");
+    div.className = "list-item";
+
+    div.innerHTML = `
+      <div class="list-info">
+        <div class="list-title">${a.first_name} ${a.last_name}</div>
+        <div class="list-sub">${a.doctor_name || ""}</div>
+      </div>
+
+      <div class="list-meta">
+        <div>${a.appointment_time}</div>
+        <div>${a.appointment_date}</div>
+      </div>
+    `;
+
+    container.appendChild(div);
   });
 }
 
@@ -148,18 +172,29 @@ function renderWardOccupancy(list = []) {
 }
 
 function renderRecentBills(list = []) {
-  const ul = document.getElementById("recentBills");
-  if (!ul) return;
+  const container = document.getElementById("recentBills");
+  if (!container) return;
 
-  ul.innerHTML = "";
+  container.innerHTML = "";
+
   list.forEach(b => {
-    const li = document.createElement("li");
-    li.textContent =
-      `${b.first_name} ${b.last_name} – ₹${b.total_amount} (${b.payment_status})`;
-    ul.appendChild(li);
+    const div = document.createElement("div");
+    div.className = "list-item";
+
+    div.innerHTML = `
+      <div class="list-info">
+        <div class="list-title">${b.first_name} ${b.last_name}</div>
+        <div class="list-sub">₹${b.total_amount}</div>
+      </div>
+
+      <span class="status ${b.payment_status.toLowerCase()}">
+        ${b.payment_status}
+      </span>
+    `;
+
+    container.appendChild(div);
   });
 }
-
 /* ===============================
    HELPERS
 ================================ */

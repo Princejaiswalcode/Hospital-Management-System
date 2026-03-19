@@ -237,3 +237,271 @@ a {
   background: #2563eb;
   border-radius: 999px;
 }
+/* =========================
+   UI POLISH (SAFE PATCH)
+========================= */
+
+/* SECTION SPACING */
+.cards,
+.ward-cards,
+.grid {
+  margin-top: 10px;
+}
+
+/* CARD IMPROVEMENT */
+.card {
+  transition: 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* CARD VALUE EMPHASIS */
+.card p {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* ADD SUBTLE BORDER */
+.card, .box, .ward-card {
+  border: 1px solid #eef2f7;
+}
+
+/* HEADER IMPROVEMENT */
+.header h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.header p {
+  font-size: 13px;
+}
+
+/* LIST IMPROVEMENT */
+.box ul li {
+  transition: 0.2s;
+}
+
+.box ul li:hover {
+  background: #eef2ff;
+}
+
+/* EMPTY STATE FIX */
+.box ul li:only-child {
+  text-align: center;
+  color: #9ca3af;
+}
+
+/* WARD CARDS BALANCE */
+.ward-card {
+  padding: 14px 16px;
+}
+
+.ward-card h4 {
+  font-size: 14px;
+}
+
+.ward-card p {
+  font-size: 12px;
+}
+
+/* PROGRESS BAR SMOOTH */
+.progress-bar {
+  transition: width 0.4s ease;
+}
+
+/* GRID GAP IMPROVEMENT */
+.grid {
+  gap: 20px;
+}
+
+/* RESPONSIVE POLISH */
+@media (max-width: 768px) {
+  .main {
+    padding: 16px;
+  }
+}
+/* =========================
+   MODERN LIST UI
+========================= */
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  padding: 14px 16px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.list-item:hover {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* LEFT CONTENT */
+.list-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.list-sub {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* RIGHT SIDE */
+.list-meta {
+  text-align: right;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* STATUS BADGES */
+.status {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status.admitted {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status.observation {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status.discharged {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* =========================
+   PREMIUM LIST UI
+========================= */
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: #f8fafc;
+  transition: all 0.25s ease;
+  border: 1px solid #eef2f7;
+}
+
+.list-item:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+}
+
+/* LEFT */
+.list-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* AVATAR */
+.avatar-sm {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* TEXT */
+.list-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.list-sub {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* RIGHT */
+.list-right {
+  text-align: right;
+}
+
+/* TIME / META */
+.meta {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* BADGES */
+.badge {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge.admitted {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.badge.observation {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.badge.discharged {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badge.paid {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badge.pending {
+  background: #fef3c7;
+  color: #b45309;
+}

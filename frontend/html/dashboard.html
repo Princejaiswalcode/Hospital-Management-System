@@ -51,18 +51,6 @@
       <a class="nav-link" data-page="salary" data-role="admin,accounts">
         Salary Payments
       </a>
-
-      <a class="nav-link" data-page="patient-profile" data-role="patient">
-        My Profile
-      </a>
-
-      <a class="nav-link" data-page="my-appointments" data-role="patient">
-        My Appointments
-      </a>
-
-      <a class="nav-link" data-page="my-bills" data-role="patient">
-        My Bills
-      </a>
     </nav>
 
     <button class="logout">Logout</button>
@@ -86,51 +74,60 @@
         </div>
       </header>
 
-      <!-- STATS -->
+      <!-- ✅ STATS (ROLE-BASED PER CARD) -->
       <section class="cards">
-        <div class="card">
+
+        <div class="card" data-role="admin,reception,nurse">
           <h3>Total Patients</h3>
           <p id="totalPatients">0</p>
         </div>
 
-        <div class="card">
+        <div class="card" data-role="admin,reception,doctor">
           <h3>Today's Appointments</h3>
           <p id="todayAppointments">0</p>
         </div>
 
-        <div class="card">
+        <div class="card" data-role="admin,nurse">
           <h3>Admitted Patients</h3>
           <p id="admittedPatients">0</p>
         </div>
 
-        <div class="card">
+        <div class="card" data-role="admin,accounts">
           <h3>Pending Bills</h3>
           <p id="pendingBills">0</p>
         </div>
-      </section>
-
-      <!-- ✅ WARD CARDS (NEW) -->
-      <section class="ward-cards" id="dashboardWardCards"></section>
-
-      <!-- LISTS -->
-      <section class="grid">
-
-        <div class="box">
-          <h3>Recent Patients</h3>
-          <ul id="recentPatients"></ul>
-        </div>
-
-        <div class="box">
-          <h3>Upcoming Appointments</h3>
-          <ul id="upcomingAppointments"></ul>
-        </div>
-
-        <div class="box">
-          <h3>Recent Bills</h3>
-          <ul id="recentBills"></ul>
-        </div>
 
       </section>
+
+      <!-- ✅ WARDS -->
+      <section 
+        class="ward-cards" 
+        id="dashboardWardCards"
+        data-role="admin,nurse"
+      ></section>
+
+      <!-- ✅ LISTS -->
+        <section class="grid">
+
+          <!-- RECENT PATIENTS -->
+          <div class="box" data-role="admin,reception,nurse">
+            <h3>Recent Patients</h3>
+            <div id="recentPatients" class="list-container"></div>
+          </div>
+
+          <!-- APPOINTMENTS -->
+          <div class="box" data-role="admin,reception,doctor">
+            <h3>Upcoming Appointments</h3>
+            <div id="upcomingAppointments" class="list-container"></div>
+          </div>
+
+          <!-- BILLS -->
+          <div class="box" data-role="admin,accounts">
+            <h3>Recent Bills</h3>
+            <div id="recentBills" class="list-container"></div>
+          </div>
+
+        </section>
 
     </section>
 
