@@ -34,7 +34,53 @@ export const fetchMyBills = asyncHandler(async (req, res) => {
    CREATE BILL
 ========================= */
 export const createNewBill = asyncHandler(async (req, res) => {
-  const billId = await createBill(req.body);
+  const {
+    patient_id,
+    appointment_id,
+    treatment_id,
+    admission_id,
+    consultation_charge,
+    medicine_charge,
+    room_charge,
+    total_amount,
+    payment_status,
+    bill_date
+  } = req.body;
+
+  // ✅ Validation
+  if (!patient_id) {
+    throw new ApiError(400, "Patient ID is required");
+  }
+
+  if (
+    consultation_charge < 0 ||
+    medicine_charge < 0 ||
+    room_charge < 0
+  ) {
+    throw new ApiError(400, "Charges cannot be negative");
+  }
+
+  const calculatedTotal =
+    Number(consultation_charge) +
+    Number(medicine_charge) +
+    Number(room_charge);
+
+  if (calculatedTotal !== Number(total_amount)) {
+    throw new ApiError(400, "Total amount mismatch");
+  }
+
+  const billId = await createBill({
+    patient_id,
+    appointment_id,
+    treatment_id,
+    admission_id,
+    consultation_charge,
+    medicine_charge,
+    room_charge,
+    total_amount,
+    payment_status,
+    bill_date
+  });
 
   res
     .status(201)
@@ -47,7 +93,11 @@ export const createNewBill = asyncHandler(async (req, res) => {
 export const payBill = asyncHandler(async (req, res) => {
   const { bill_id } = req.params;
 
-  await markBillAsPaid(bill_id);
+  const updated = await markBillAsPaid(bill_id);
+
+  if (!updated) {
+    throw new ApiError(404, "Bill not found or already paid");
+  }
 
   res.status(200).json(new ApiResponse(200, null, "Bill paid successfully"));
 });

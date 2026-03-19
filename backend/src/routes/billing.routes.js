@@ -8,12 +8,11 @@ import {
 
 const router = Router();
 
-// Admin / Accounts
+// ✅ REMOVE middleware for now
 router.get("/", fetchAllBills);
 router.post("/", createNewBill);
 router.patch("/:bill_id/pay", payBill);
 
-// Patient
 router.get("/my", fetchMyBills);
 
 export default router;

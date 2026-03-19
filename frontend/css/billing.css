@@ -31,3 +31,6 @@
   color: #2563eb;
   font-weight: bold;
 }
+.hidden {
+  display: none !important;
+}

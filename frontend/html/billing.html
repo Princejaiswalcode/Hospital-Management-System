@@ -70,17 +70,17 @@
 
         <div>
           <label>Consultation Charge</label>
-          <input type="number" id="consultationCharge" value="0">
+          <input type="number" id="consultationCharge" value="0" min="0">>
         </div>
 
         <div>
           <label>Medicine Charge</label>
-          <input type="number" id="medicineCharge" value="0">
+          <input type="number" id="medicineCharge" value="0" min="0">
         </div>
 
         <div>
           <label>Room Charge</label>
-          <input type="number" id="roomCharge" value="0">
+          <input type="number" id="roomCharge" value="0" min="0">
         </div>
       </div>
 
@@ -90,8 +90,8 @@
       </div>
 
       <div class="form-actions">
-        <button class="primary-btn" id="generateBillBtn">Generate Bill</button>
-        <button class="secondary-btn" id="cancelBillBtn">Cancel</button>
+       <button type="button" class="primary-btn" id="generateBillBtn">Generate Bill</button>
+        <button type="button" class="secondary-btn" id="cancelBillBtn">Cancel</button>
       </div>
     </div>
 

@@ -20,8 +20,7 @@ export const getAllBills = async () => {
       b.payment_status,
 
       DATE_FORMAT(b.bill_date, '%Y-%m-%d') AS bill_date,
-
-      IFNULL(DATE_FORMAT(b.payment_date, '%Y-%m-%d'), NULL) AS payment_date
+      DATE_FORMAT(b.payment_date, '%Y-%m-%d') AS payment_date
 
     FROM bills b
     JOIN patients p ON p.patient_id = b.patient_id
@@ -39,8 +38,8 @@ export const getBillsByPatientId = async (patient_id) => {
       bill_id,
       total_amount,
       payment_status,
-      bill_date,
-      payment_date
+      DATE_FORMAT(bill_date, '%Y-%m-%d') AS bill_date,
+      DATE_FORMAT(payment_date, '%Y-%m-%d') AS payment_date
     FROM bills
     WHERE patient_id = ?
     ORDER BY bill_date DESC
@@ -92,13 +91,16 @@ export const createBill = async (data) => {
 
 // Mark bill as paid
 export const markBillAsPaid = async (bill_id) => {
-  await db.execute(
+  const [result] = await db.execute(
     `
     UPDATE bills
     SET payment_status = 'Paid',
         payment_date = CURDATE()
     WHERE bill_id = ?
+      AND payment_status != 'Paid'
   `,
     [bill_id]
   );
+
+  return result.affectedRows;
 };

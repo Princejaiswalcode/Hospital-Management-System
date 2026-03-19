@@ -18,7 +18,10 @@ function checkRoleAccess() {
     window.location.href = "/frontend/html/dashboard.html";
   }
 }
-/* USER INFO */
+
+/* =========================
+   USER INFO
+========================= */
 function loadUserInfo() {
   const user = sessionStorage.getItem("user");
   if (!user) {
@@ -34,7 +37,7 @@ function loadUserInfo() {
 }
 
 /* =========================
-   FORM ACTIONS
+   FORM ACTIONS (FIXED)
 ========================= */
 function setupFormActions() {
   const formCard = document.getElementById("billFormCard");
@@ -46,30 +49,56 @@ function setupFormActions() {
   const medicine = document.getElementById("medicineCharge");
   const room = document.getElementById("roomCharge");
 
-  toggleBtn.onclick = () => {
-    formCard.classList.toggle("hidden");
-  };
+  // ✅ Ensure hidden initially
+  formCard.classList.add("hidden");
 
-  cancelBtn.onclick = () => {
+  // ✅ OPEN FORM
+  toggleBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    formCard.classList.remove("hidden");
+  });
+
+  // ✅ CLOSE FORM (CANCEL)
+  cancelBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     formCard.classList.add("hidden");
-  };
+  });
 
+  // ✅ TOTAL UPDATE
   [consultation, medicine, room].forEach(input =>
     input.addEventListener("input", updateTotal)
   );
 
-  generateBtn.onclick = createBill;
+  // ✅ GENERATE BILL
+  generateBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    createBill();
+  });
 }
 
 /* =========================
    TOTAL CALC
 ========================= */
 function updateTotal() {
-  const consultation = Number(document.getElementById("consultationCharge").value);
-  const medicine = Number(document.getElementById("medicineCharge").value);
-  const room = Number(document.getElementById("roomCharge").value);
+  const consultationInput = document.getElementById("consultationCharge");
+  const medicineInput = document.getElementById("medicineCharge");
+  const roomInput = document.getElementById("roomCharge");
+
+  // ✅ sanitize values
+  const consultation = Math.max(0, Number(consultationInput.value) || 0);
+  const medicine = Math.max(0, Number(medicineInput.value) || 0);
+  const room = Math.max(0, Number(roomInput.value) || 0);
+
+  // ✅ remove negative / leading zero visually
+  consultationInput.value = consultation;
+  medicineInput.value = medicine;
+  roomInput.value = room;
 
   const total = consultation + medicine + room;
+
   document.getElementById("totalAmount").innerText = `₹${total.toFixed(2)}`;
 }
 
@@ -101,7 +130,7 @@ function loadBills() {
         return;
       }
 
-      data.forEach((b, index) => {
+      data.forEach((b) => {
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
@@ -135,6 +164,9 @@ function loadBills() {
     });
 }
 
+/* =========================
+   LOAD PATIENTS
+========================= */
 function loadPatients() {
   const token = sessionStorage.getItem("token");
   const select = document.getElementById("patientSelect");
@@ -163,8 +195,9 @@ function loadPatients() {
       showToast("error", "Failed to load patients");
     });
 }
+
 /* =========================
-   CREATE BILL
+   CREATE BILL (FIXED)
 ========================= */
 function createBill() {
   const token = sessionStorage.getItem("token");
@@ -177,11 +210,9 @@ function createBill() {
 
   const payload = {
     patient_id: document.getElementById("patientSelect").value,
-
     consultation_charge: consultation,
     medicine_charge: medicine,
     room_charge: room,
-
     total_amount: total,
     payment_status: "Pending",
     bill_date: new Date().toISOString().split("T")[0]
@@ -197,8 +228,19 @@ function createBill() {
   })
     .then(res => {
       if (!res.ok) throw new Error();
+
       showToast("success", "Bill generated");
+
+      // ✅ close form
       document.getElementById("billFormCard").classList.add("hidden");
+
+      // ✅ reset form
+      document.getElementById("patientSelect").value = "";
+      document.getElementById("consultationCharge").value = 0;
+      document.getElementById("medicineCharge").value = 0;
+      document.getElementById("roomCharge").value = 0;
+      updateTotal();
+
       loadBills();
     })
     .catch(() => showToast("error", "Failed to generate bill"));
@@ -221,6 +263,10 @@ function markPaid(id) {
       loadBills();
     });
 }
+cancelBtn.onclick = (e) => {
+  e.preventDefault();
+  formCard.classList.add("hidden");
+};
 
 /* =========================
    LOGOUT
