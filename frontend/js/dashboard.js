@@ -173,7 +173,54 @@ function setText(id, value) {
 function capitalize(text = "") {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
+function renderWardCards(containerId, wards) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
 
+  container.innerHTML = "";
+
+  wards.forEach(function (w) {
+    const occupied = w.total_beds - w.available_beds;
+    const percent = (occupied / w.total_beds) * 100;
+
+    const card = document.createElement("div");
+    card.className = "ward-card";
+
+    card.innerHTML =
+      "<h4>" + w.ward_name + "</h4>" +
+      "<p>Total: " + w.total_beds + "</p>" +
+      "<p>Occupied: <span class='danger'>" + occupied + "</span></p>" +
+      "<p>Available: <span class='success'>" + w.available_beds + "</span></p>" +
+      "<div class='progress'>" +
+      "<div class='progress-bar' style='width:" + percent + "%'></div>" +
+      "</div>";
+
+    container.appendChild(card);
+  });
+}
+async function loadDashboardWards() {
+  try {
+    const token = sessionStorage.getItem("token");
+
+    const res = await fetch("http://localhost:5000/api/wards", {
+      headers: { Authorization: "Bearer " + token },
+      cache: "no-store"
+    });
+
+    if (!res.ok) throw new Error("API failed");
+
+    const result = await res.json();
+    const wards = result.data || result;
+
+    renderWardCards("dashboardWardCards", wards);
+
+  } catch (err) {
+    console.error("Dashboard ward error:", err);
+  }
+}
+document.addEventListener("DOMContentLoaded", function () {
+  loadDashboardWards();
+});
 /* ===============================
    LOGOUT
 ================================ */
