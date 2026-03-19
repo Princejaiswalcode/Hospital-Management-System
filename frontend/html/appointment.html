@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,130 +9,151 @@
   <link rel="stylesheet" href="/frontend/css/appointment.css" />
 
   <!-- SweetAlert -->
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
 
 <div class="app">
 
   <!-- SIDEBAR -->
+
   <aside class="sidebar">
     <h2 class="logo">Hospital System</h2>
 
-    <nav id="sidebarNav">
-      <a data-page="dashboard">Dashboard</a>
-      <a data-page="patients" data-role="admin,reception,nurse">Patients</a>
-      <a id="act" data-page="appointments" data-role="admin,reception,doctor" class="active">Appointments</a>
-      <a data-page="treatments" data-role="admin,doctor,nurse">Treatments</a>
-      <a data-page="wards" data-role="admin,nurse">Wards & Admission</a>
-      <a data-page="billing" data-role="admin,accounts">Billing</a>
-      <a data-page="salary" data-role="admin,accounts">Salary Payments</a>
-      <a data-page="my-appointments" data-role="patient,doctor">My Appointments</a>
-    </nav>
+```
+<nav id="sidebarNav">
+  <a data-page="dashboard">Dashboard</a>
+  <a data-page="patients" data-role="admin,reception,nurse">Patients</a>
+  <a id="act" data-page="appointments" data-role="admin,reception,doctor" class="active">Appointments</a>
+  <a data-page="treatments" data-role="admin,doctor,nurse">Treatments</a>
+  <a data-page="wards" data-role="admin,nurse">Wards & Admission</a>
+  <a data-page="billing" data-role="admin,accounts">Billing</a>
+  <a data-page="salary" data-role="admin,accounts">Salary Payments</a>
+  <a data-page="my-appointments" data-role="patient,doctor">My Appointments</a>
+</nav>
 
-    <button class="logout">Logout</button>
+<button class="logout">Logout</button>
+```
+
   </aside>
 
   <!-- MAIN -->
+
   <main class="main">
 
-    <!-- HEADER -->
-    <header class="header">
+```
+<!-- HEADER -->
+<header class="header">
+  <div>
+    <h1>Welcome, <span id="userName">—</span></h1>
+    <p id="userRole">— Dashboard</p>
+  </div>
+
+  <div class="user">
+    <span id="headerUserName">—</span>
+    <div class="avatar" id="userAvatar">?</div>
+  </div>
+</header>
+
+<!-- PAGE TITLE -->
+<div class="page-title">
+  <h2>Appointment Management</h2>
+  <button class="primary-btn" id="btnShowForm">+ New Appointment</button>
+</div>
+
+<!-- ✅ MODAL OVERLAY (NEW) -->
+<div id="appointmentModal" class="modal hidden">
+
+  <!-- BACKDROP -->
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+
+  <!-- MODAL CONTENT -->
+  <div class="modal-content">
+
+    <h3>Schedule New Appointment</h3>
+
+    <form id="appointmentForm" class="form-grid">
+
       <div>
-        <h1>Welcome, <span id="userName">—</span></h1>
-        <p id="userRole">— Dashboard</p>
+        <label>Patient</label>
+        <select id="patientSelect" required>
+          <option value="">Select Patient</option>
+        </select>
       </div>
 
-      <div class="user">
-        <span id="headerUserName">—</span>
-        <div class="avatar" id="userAvatar">?</div>
+      <div>
+        <label>Doctor</label>
+        <select id="doctorSelect" required>
+          <option value="">Select Doctor</option>
+        </select>
       </div>
-    </header>
 
-    <!-- PAGE TITLE -->
-    <div class="page-title">
-      <h2>Appointment Management</h2>
-      <button class="primary-btn" id="btnShowForm">+ New Appointment</button>
-    </div>
+      <div>
+        <label>Date</label>
+        <input type="date" id="appointmentDate" required />
+      </div>
 
-    <!-- ADD APPOINTMENT FORM -->
-    <div class="card" id="appointmentFormCard" style="display:none;">
-      <h3>Schedule New Appointment</h3>
+      <div>
+        <label>Time</label>
+        <select id="appointmentTime" required>
+          <option value="">Select Time</option>
+        </select>
+      </div>
 
-      <form id="appointmentForm" class="form-grid">
+      <div style="grid-column: span 2;">
+        <label>Reason</label>
+        <input type="text" id="appointmentReason" placeholder="Eg: Consultation, Fever" required />
+      </div>
 
-        <div>
-          <label>Patient</label>
-          <select id="patientSelect" required>
-            <option value="">Select Patient</option>
-          </select>
-        </div>
+      <div style="grid-column: span 2;">
+        <label>Notes (optional)</label>
+        <input type="text" id="appointmentNotes" placeholder="Additional notes (optional)" />
+      </div>
 
-        <div>
-          <label>Doctor</label>
-          <select id="doctorSelect" required>
-            <option value="">Select Doctor</option>
-          </select>
-        </div>
+      <div class="form-actions">
+        <button type="submit" class="primary-btn">Create Appointment</button>
+        <button type="button" class="secondary-btn" id="btnCancelForm">Cancel</button>
+      </div>
 
-        <div>
-          <label>Date</label>
-          <input type="date" id="appointmentDate" required />
-        </div>
+    </form>
 
-        <div>
-          <label>Time</label>
-          <select id="appointmentTime" required>
-            <option value="">Select Time</option>
-          </select>
-        </div>
+  </div>
+</div>
 
-        <div style="grid-column: span 2;">
-          <label>Reason</label>
-          <input type="text" id="appointmentReason" placeholder="Eg: Consultation, Fever" required />
-        </div>
-
-        <div style="grid-column: span 2;">
-          <label>Notes (optional)</label>
-          <input type="text" id="appointmentNotes" placeholder="Additional notes (optional)" />
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="primary-btn">Create Appointment</button>
-          <button type="button" class="secondary-btn" id="btnCancelForm">Cancel</button>
-        </div>
-
-      </form>
-    </div>
-
-    <!-- APPOINTMENTS TABLE -->
-    <div class="card">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT</th>
-            <th>DOCTOR</th>
-            <th>DATE</th>
-            <th>TIME</th>
-            <th>REASON</th>
-            <th>STATUS</th>
-          </tr>
-        </thead>
-        <tbody id="appointmentsTable">
-          <!-- Injected by JS -->
-        </tbody>
-      </table>
-    </div>
+<!-- APPOINTMENTS TABLE -->
+<div class="card">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>PATIENT ID</th>
+        <th>PATIENT</th>
+        <th>DOCTOR</th>
+        <th>DATE</th>
+        <th>TIME</th>
+        <th>REASON</th>
+        <th>STATUS</th>
+      </tr>
+    </thead>
+    <tbody id="appointmentsTable">
+      <!-- Injected by JS -->
+    </tbody>
+  </table>
+</div>
+```
 
   </main>
 </div>
 
 <!-- GLOBAL JS -->
+
 <script src="/frontend/js/toast.js"></script>
+
 <script src="/frontend/js/layout.js"></script>
 
 <!-- PAGE JS -->
+
 <script src="/frontend/js/appointment.js"></script>
 
 </body>
