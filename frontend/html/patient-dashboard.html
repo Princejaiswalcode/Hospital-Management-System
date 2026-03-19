@@ -1,34 +1,95 @@
-<section class="page">
-  <h2>Patient Dashboard</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <div class="summary-cards">
-    <div class="card">
-      <h4>Upcoming Appointments</h4>
-      <p id="upcomingCount">0</p>
-    </div>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/patient-dashboard.css" />
+</head>
 
-    <div class="card">
-      <h4>Total Treatments</h4>
-      <p id="treatmentCount">0</p>
-    </div>
+<body>
 
-    <div class="card">
-      <h4>Pending Bills</h4>
-      <p id="pendingBills">₹0</p>
-    </div>
-  </div>
+<div class="app-layout">
 
-  <div class="grid">
-    <div class="box">
-      <h3>Upcoming Appointments</h3>
-      <ul id="upcomingAppointments"></ul>
-    </div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="logo">Hospital System</h2>
 
-    <div class="box">
-      <h3>Recent Treatments</h3>
-      <ul id="recentTreatments"></ul>
-    </div>
-  </div>
-</section>
+      <nav id="sidebarNav">
+        <a href="patient-dashboard.html" class="nav-link active">Dashboard</a>
+        <a class="nav-link" href="patient_profile.html">My Profile</a>
+        <a class="nav-link" href="my-appointments.html">My Appointments</a>
+        <a  href="my-bills.html">My Bills</a>
+      </nav>
 
-<script src="/frontend/js/patient-dashboard.js"></script>
+    <button class="logout">Logout</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div>
+        <h1 id="welcomeText"></h1>
+        <p>Patient Dashboard</p>
+      </div>
+
+      <div class="user-box">
+        <span id="headerUserName"></span>
+        <div id="userAvatar" class="avatar"></div>
+      </div>
+    </header>
+
+    <!-- PROFILE CARD -->
+    <section class="profile-card">
+      <div class="avatar-lg" id="profileAvatar">R</div>
+
+      <div>
+        <h2 id="profileName"></h2>
+        <p id="profileInfo"></p>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="cards">
+      <div class="card">
+        <p>Upcoming Appointments</p>
+        <h2 id="appointmentCount">0</h2>
+      </div>
+
+      <div class="card">
+        <p>Total Treatments</p>
+        <h2 id="treatmentCount">0</h2>
+      </div>
+
+      <div class="card">
+        <p>Pending Bills</p>
+        <h2 id="pendingBills">0</h2>
+      </div>
+    </section>
+
+    <!-- GRID -->
+    <section class="grid">
+
+      <div class="box">
+        <h3>Upcoming Appointments</h3>
+        <div id="appointments"></div>
+      </div>
+
+      <div class="box">
+        <h3>Recent Treatments</h3>
+        <div id="treatments"></div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="../js/patient-dashboard.js"></script>
+
+</body>
+</html>

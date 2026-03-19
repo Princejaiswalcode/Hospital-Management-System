@@ -7,6 +7,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // 🚨 BLOCK PATIENT ACCESS
+  const role = user.role?.toLowerCase();
+
+  if (role === "patient") {
+    window.location.href = "/frontend/html/patient-dashboard.html";
+    return;
+  }
+
+  // ✅ Continue normal staff flow
   applyUserInfo(user);
   applyRoleAccess(user.role);
   loadDashboardFromAPI(token);
