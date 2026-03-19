@@ -24,12 +24,7 @@
       <a data-page="wards" data-role="admin,nurse">Wards & Admission</a>
       <a id="act" data-page="billing" data-role="admin,accounts">Billing</a>
       <a data-page="salary" data-role="admin,accounts">Salary Payments</a>
-
-      <a data-page="profile" data-role="patient,reception">My Profile</a>
-      <a data-page="myAppointments" data-role="patient,doctor">My Appointments</a>
-      <a data-page="myBills" data-role="patient">My Bills</a>
     </nav>
-
 
     <button class="logout">Logout</button>
   </aside>
@@ -50,52 +45,56 @@
       </div>
     </header>
 
-    <!-- PAGE TITLE -->
+    <!-- TITLE -->
     <div class="page-title">
       <h2>Billing Management</h2>
       <button class="primary-btn" id="toggleBillForm">+ Generate Bill</button>
     </div>
 
-    <!-- BILL FORM -->
-    <div class="card hidden" id="billFormCard">
-      <h3>Generate New Bill</h3>
+    <!-- MODAL FORM -->
+    <div id="billFormModal" class="modal hidden">
+      <div class="modal-content">
 
-      <div class="form-grid">
-        <div>
-          <label>Patient</label>
-          <select id="patientSelect">
-            <option value="">Select Patient</option>
-          </select>
+        <h3>Generate New Bill</h3>
+
+        <div class="form-grid">
+          <div>
+            <label>Patient</label>
+            <select id="patientSelect">
+              <option value="">Select Patient</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Consultation Charge</label>
+            <input type="number" id="consultationCharge" value="0" min="0">
+          </div>
+
+          <div>
+            <label>Medicine Charge</label>
+            <input type="number" id="medicineCharge" value="0" min="0">
+          </div>
+
+          <div>
+            <label>Room Charge</label>
+            <input type="number" id="roomCharge" value="0" min="0">
+          </div>
         </div>
 
-        <div>
-          <label>Consultation Charge</label>
-          <input type="number" id="consultationCharge" value="0" min="0">>
+        <div class="total-box">
+          Total Amount:
+          <span id="totalAmount">₹0.00</span>
         </div>
 
-        <div>
-          <label>Medicine Charge</label>
-          <input type="number" id="medicineCharge" value="0" min="0">
+        <div class="form-actions">
+          <button class="primary-btn" id="generateBillBtn">Generate Bill</button>
+          <button class="secondary-btn" id="cancelBillBtn">Cancel</button>
         </div>
 
-        <div>
-          <label>Room Charge</label>
-          <input type="number" id="roomCharge" value="0" min="0">
-        </div>
-      </div>
-
-      <div class="total-box">
-        Total Amount:
-        <span id="totalAmount">₹0.00</span>
-      </div>
-
-      <div class="form-actions">
-       <button type="button" class="primary-btn" id="generateBillBtn">Generate Bill</button>
-        <button type="button" class="secondary-btn" id="cancelBillBtn">Cancel</button>
       </div>
     </div>
 
-    <!-- BILL TABLE -->
+    <!-- TABLE -->
     <div class="card">
       <table class="table">
         <thead>
@@ -117,6 +116,7 @@
 
   </main>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/frontend/js/toast.js"></script>
 <script src="/frontend/js/layout.js"></script>
