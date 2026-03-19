@@ -55,6 +55,17 @@ export const createAdmission = async (data) => {
     reason
   } = data;
 
+  // ✅ 1. CHECK AVAILABLE BEDS
+  const [[ward]] = await db.execute(
+    `SELECT available_beds FROM wards WHERE ward_id = ?`,
+    [ward_id]
+  );
+
+  if (!ward || ward.available_beds <= 0) {
+    throw new Error("No beds available in this ward");
+  }
+
+  // ✅ 2. INSERT ADMISSION
   const [result] = await db.execute(
     `INSERT INTO admissions
      (patient_id, ward_id, admission_date, room_number, bed_number, reason)
@@ -69,6 +80,14 @@ export const createAdmission = async (data) => {
     ]
   );
 
+  // ✅ 3. DECREASE AVAILABLE BEDS
+  await db.execute(
+    `UPDATE wards
+     SET available_beds = available_beds - 1
+     WHERE ward_id = ?`,
+    [ward_id]
+  );
+
   return result.insertId;
 };
 
@@ -77,11 +96,31 @@ export const createAdmission = async (data) => {
 ========================= */
 
 export const dischargePatient = async (id, discharge_date) => {
+
+  // ✅ 1. GET WARD ID FIRST
+  const [[admission]] = await db.execute(
+    `SELECT ward_id FROM admissions WHERE admission_id = ?`,
+    [id]
+  );
+
+  if (!admission) {
+    throw new Error("Admission not found");
+  }
+
+  // ✅ 2. UPDATE DISCHARGE DATE
   await db.execute(
     `UPDATE admissions
      SET discharge_date = ?
      WHERE admission_id = ?`,
     [discharge_date, id]
+  );
+
+  // ✅ 3. INCREASE AVAILABLE BEDS
+  await db.execute(
+    `UPDATE wards
+     SET available_beds = available_beds + 1
+     WHERE ward_id = ?`,
+    [admission.ward_id]
   );
 };
 

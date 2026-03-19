@@ -25,12 +25,7 @@
       <a id="act" data-page="wards" data-role="admin,nurse">Wards & Admission</a>
       <a data-page="billing" data-role="admin,accounts">Billing</a>
       <a data-page="salary" data-role="admin,accounts">Salary Payments</a>
-
-      <a data-page="profile" data-role="patient,reception">My Profile</a>
-      <a data-page="myAppointments" data-role="patient,doctor">My Appointments</a>
-      <a data-page="myBills" data-role="patient">My Bills</a>
     </nav>
-
 
     <button class="logout">Logout</button>
   </aside>
@@ -51,7 +46,7 @@
       </div>
     </header>
 
-    <!-- PAGE TITLE -->
+    <!-- TITLE -->
     <div class="page-title">
       <h2>Ward & Admission Management</h2>
       <button id="toggleAdmitBtn" class="primary-btn admin-only">
@@ -59,46 +54,43 @@
       </button>
     </div>
 
-    <!-- WARD CARDS -->
-    <div class="ward-grid" id="wardGrid">
-      <!-- Injected by JS -->
-    </div>
+    <!-- WARDS -->
+    <div class="ward-grid" id="wardGrid"></div>
 
-    <!-- ADMIT FORM -->
-    <div id="admitFormCard" class="card hidden admin-only">
-      <h3>Admit Patient</h3>
+    <!-- ✅ MODAL -->
+    <div id="admitFormCard" class="hidden admin-only">
+      <div class="form-container">
 
-      <div class="form-grid">
-        <div>
-          <label>Patient</label>
-          <select id="patientSelect">
-            <option value="">Select Patient</option>
-          </select>
+        <h3>Admit Patient</h3>
+
+        <div class="form-grid">
+          <div>
+            <label>Patient</label>
+            <select id="patientSelect"></select>
+          </div>
+
+          <div>
+            <label>Ward</label>
+            <select id="wardSelect"></select>
+          </div>
+
+          <div>
+            <label>Admission Date</label>
+            <input type="date" id="admissionDate" />
+          </div>
         </div>
 
-        <div>
-          <label>Ward</label>
-          <select id="wardSelect">
-            <option value="">Select Ward</option>
-          </select>
+        <div class="form-actions">
+          <button id="admitBtn" class="primary-btn">Admit Patient</button>
+          <button id="cancelAdmitBtn" class="secondary-btn">Cancel</button>
         </div>
 
-        <div>
-          <label>Admission Date</label>
-          <input type="date" id="admissionDate" />
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button id="admitBtn" class="primary-btn">Admit Patient</button>
-        <button id="cancelAdmitBtn" class="secondary-btn">Cancel</button>
       </div>
     </div>
 
-    <!-- ACTIVE ADMISSIONS -->
+    <!-- TABLE -->
     <div class="card">
       <h3>Active Admissions</h3>
-
       <table class="table">
         <thead>
           <tr>
@@ -111,9 +103,7 @@
             <th class="admin-only">ACTION</th>
           </tr>
         </thead>
-        <tbody id="admissionTable">
-          <!-- Injected -->
-        </tbody>
+        <tbody id="admissionTable"></tbody>
       </table>
     </div>
 

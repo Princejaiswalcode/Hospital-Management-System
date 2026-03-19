@@ -8,7 +8,6 @@ window.addEventListener("DOMContentLoaded", () => {
   setupLogout();
 
   const user = JSON.parse(sessionStorage.getItem("user"));
-
   if (user && user.role.toLowerCase() === "admin") {
     loadPatients();
   }
@@ -49,37 +48,41 @@ function setupFormToggle() {
 
   if (!form || !toggleBtn || !cancelBtn) return;
 
-  toggleBtn.addEventListener("click", () => {
-    form.classList.toggle("hidden");
-  });
+  // OPEN
+  toggleBtn.onclick = () => form.classList.remove("hidden");
 
-  cancelBtn.addEventListener("click", () => {
-    form.classList.add("hidden");
+  // CLOSE BUTTON
+  cancelBtn.onclick = () => form.classList.add("hidden");
+
+  // CLICK OUTSIDE CLOSE
+  form.onclick = (e) => {
+    if (e.target === form) {
+      form.classList.add("hidden");
+    }
+  };
+
+  // ESC KEY CLOSE
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      form.classList.add("hidden");
+    }
   });
 }
 
 /* ================= LOAD WARDS ================= */
-/* ================= LOAD WARDS ================= */
 async function loadWards() {
   try {
-
     const token = sessionStorage.getItem("token");
 
     const res = await fetch("http://localhost:5000/api/wards", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store" // ✅ FIX: force fresh data
     });
 
-    if (!res.ok) {
-      throw new Error("API request failed");
-    }
+    if (!res.ok) throw new Error("API request failed");
 
     const result = await res.json();
-
-    console.log("Wards API response:", result); // debug
-
-    const wards = result.data || result; // handle both formats
+    const wards = result.data || result;
 
     const grid = document.getElementById("wardGrid");
     const wardSelect = document.getElementById("wardSelect");
@@ -90,11 +93,9 @@ async function loadWards() {
     wardSelect.innerHTML = `<option value="">Select Ward</option>`;
 
     wards.forEach(w => {
-
       const occupied = w.total_beds - w.available_beds;
       const percent = (occupied / w.total_beds) * 100;
 
-      /* Ward card */
       const card = document.createElement("div");
       card.className = "ward-card";
 
@@ -110,46 +111,33 @@ async function loadWards() {
 
       grid.appendChild(card);
 
-      /* Dropdown option */
       const option = document.createElement("option");
       option.value = w.ward_id;
       option.textContent = `${w.ward_name} (${w.available_beds} beds available)`;
 
-      if (w.available_beds <= 0) {
-        option.disabled = true;
-      }
+      if (w.available_beds <= 0) option.disabled = true;
 
       wardSelect.appendChild(option);
-
     });
 
   } catch (err) {
-
     console.error("Ward load error:", err);
-
     Swal.fire("Error", "Failed to load wards", "error");
-
   }
 }
 
 /* ================= LOAD PATIENTS ================= */
 async function loadPatients() {
   try {
-
     const token = sessionStorage.getItem("token");
 
     const res = await fetch("http://localhost:5000/api/patients", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      headers: { Authorization: `Bearer ${token}` }
     });
 
-    if (!res.ok) {
-      throw new Error("API request failed");
-    }
+    if (!res.ok) throw new Error("API request failed");
 
-    const patients = await res.json();   // backend returns ARRAY
-
+    const patients = await res.json();
     const select = document.getElementById("patientSelect");
 
     if (!select) return;
@@ -175,11 +163,13 @@ async function loadAdmissions() {
     const token = sessionStorage.getItem("token");
 
     const res = await fetch("http://localhost:5000/api/admissions", {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store" // ✅ FIX
     });
 
     const result = await res.json();
     const table = document.getElementById("admissionTable");
+
     table.innerHTML = "";
 
     result.data.forEach(a => {
@@ -216,7 +206,7 @@ function setupAdmitHandler() {
   const admitBtn = document.getElementById("admitBtn");
   if (!admitBtn) return;
 
-  admitBtn.addEventListener("click", admitPatient);
+  admitBtn.onclick = admitPatient;
 }
 
 function admitPatient() {
@@ -245,28 +235,33 @@ function admitPatient() {
     },
     body: JSON.stringify(payload)
   })
-  .then(async res => {
-    const text = await res.text();
-
-    if (!res.ok) {
-      throw new Error(text);
-    }
-
-    return JSON.parse(text);
+  .then(res => {
+    if (!res.ok) throw new Error();
+    return res.json();
   })
-  .then(data => {
+  .then(() => {
     Swal.fire("Success", "Patient admitted successfully", "success");
 
+    // ✅ CLOSE FORM
     document.getElementById("admitFormCard").classList.add("hidden");
 
-    loadWards();
-    loadAdmissions();
+    // ✅ RESET FORM
+    document.getElementById("patientSelect").value = "";
+    document.getElementById("wardSelect").value = "";
+    document.getElementById("admissionDate").value = "";
+
+    // ✅ REFRESH DATA
+    setTimeout(() => {
+      loadWards();
+      loadAdmissions();
+    }, 200);
+
   })
-  .catch(err => {
-    console.error(err);
+  .catch(() => {
     Swal.fire("Error", "Admission failed", "error");
   });
 }
+
 /* ================= DISCHARGE ================= */
 async function dischargePatient(id) {
   try {
@@ -281,13 +276,14 @@ async function dischargePatient(id) {
     );
 
     const result = await res.json();
-
     if (!res.ok) throw new Error(result.message);
 
     Swal.fire("Success", "Patient discharged", "success");
 
-    loadWards();
-    loadAdmissions();
+    setTimeout(() => {
+      loadWards();
+      loadAdmissions();
+    }, 200);
 
   } catch (err) {
     Swal.fire("Error", err.message || "Discharge failed", "error");
