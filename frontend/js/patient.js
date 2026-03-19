@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
   const user = JSON.parse(sessionStorage.getItem("user"));
 
   if (!user) {
@@ -21,29 +21,43 @@ function loadUserInfo() {
 
   document.getElementById("userName").innerText = data.full_name;
   document.getElementById("headerUserName").innerText = data.full_name;
-  document.getElementById("userRole").innerText = `${data.role} Dashboard`;
+  document.getElementById("userRole").innerText = data.role + " Dashboard";
   document.getElementById("userAvatar").innerText =
     data.full_name.charAt(0).toUpperCase();
 }
 
 /* =========================
-   UI BINDINGS
+   UI BINDINGS (MODAL)
 ========================= */
 function bindUI() {
   const btnShow = document.getElementById("btnShowForm");
   const btnCancel = document.getElementById("btnCancelForm");
-  const formCard = document.getElementById("patientFormCard");
+  const modal = document.getElementById("patientModal");
+  const backdrop = document.getElementById("patientBackdrop");
   const form = document.getElementById("patientForm");
 
-  btnShow.addEventListener("click", () => {
-    formCard.style.display = "block";
-    btnShow.style.display = "none";
-  });
+  if (!btnShow || !btnCancel || !modal || !backdrop || !form) return;
 
-  btnCancel.addEventListener("click", () => {
-    formCard.style.display = "none";
-    btnShow.style.display = "inline-block";
+  // OPEN MODAL
+  btnShow.onclick = function () {
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  };
+
+  // CLOSE MODAL
+  function closeModal() {
+    modal.classList.add("hidden");
     form.reset();
+    document.body.style.overflow = "auto";
+  }
+
+  btnCancel.onclick = closeModal;
+  backdrop.onclick = closeModal;
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closeModal();
+    }
   });
 
   form.addEventListener("submit", submitPatient);
@@ -57,43 +71,50 @@ function loadPatients() {
 
   fetch("http://localhost:5000/api/patients", {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: "Bearer " + token
     }
   })
-    .then(res => res.json())
-    .then(renderPatients)
-    .catch(() =>
-      showToast("error", "Failed to load patients")
-    );
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (patients) {
+      renderPatients(patients);
+    })
+    .catch(function () {
+      showToast("error", "Failed to load patients");
+    });
 }
 
+/* =========================
+   RENDER PATIENTS
+========================= */
 function renderPatients(patients) {
   const table = document.getElementById("patientsTable");
   table.innerHTML = "";
 
-  patients.forEach(p => {
+  if (!Array.isArray(patients) || patients.length === 0) {
+    table.innerHTML =
+      '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">No patients found</td></tr>';
+    return;
+  }
+
+  patients.forEach(function (p) {
     const tr = document.createElement("tr");
 
-    tr.innerHTML = `
-      <td>#${p.patient_id}</td>
-      <td><strong>${p.first_name} ${p.last_name ?? ""}</strong></td>
-      <td>${p.age ?? "-"} / ${p.gender}</td>
-      <td>${p.phone ?? "-"}</td>
-      <td>${p.address ?? "-"}</td>
-      <td>
-        <span class="badge ${p.status.toLowerCase()}">
-          ${p.status}
-        </span>
-      </td>
-    `;
+    tr.innerHTML =
+      "<td>#" + p.patient_id + "</td>" +
+      "<td><strong>" + p.first_name + " " + (p.last_name || "") + "</strong></td>" +
+      "<td>" + (p.age || "-") + " / " + p.gender + "</td>" +
+      "<td>" + (p.phone || "-") + "</td>" +
+      "<td>" + (p.address || "-") + "</td>" +
+      '<td><span class="badge ' + p.status.toLowerCase() + '">' +
+      p.status +
+      "</span></td>";
 
     table.appendChild(tr);
   });
 }
 
-/* =========================
-   ADD PATIENT (FIXED)
-========================= */
 /* =========================
    ADD PATIENT
 ========================= */
@@ -114,7 +135,6 @@ function submitPatient(e) {
     status: document.getElementById("status").value
   };
 
-  // Required validation
   if (
     !payload.first_name ||
     !payload.gender ||
@@ -130,24 +150,28 @@ function submitPatient(e) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`
+      Authorization: "Bearer " + sessionStorage.getItem("token")
     },
     body: JSON.stringify(payload)
   })
-    .then(res => {
+    .then(function (res) {
       if (!res.ok) throw new Error();
       return res.json();
     })
-    .then(() => {
+    .then(function () {
       showToast("success", "Patient added successfully");
+
+      document.getElementById("patientModal").classList.add("hidden");
+      document.body.style.overflow = "auto";
+
       document.getElementById("patientForm").reset();
-      document.getElementById("patientFormCard").style.display = "none";
-      document.getElementById("btnShowForm").style.display = "inline-block";
+
       loadPatients();
     })
-    .catch(() => showToast("error", "Failed to add patient"));
+    .catch(function () {
+      showToast("error", "Failed to add patient");
+    });
 }
-
 
 /* =========================
    SEARCH
@@ -155,9 +179,10 @@ function submitPatient(e) {
 function setupSearch() {
   const input = document.getElementById("searchInput");
 
-  input.addEventListener("keyup", () => {
+  input.addEventListener("keyup", function () {
     const value = input.value.toLowerCase();
-    document.querySelectorAll("#patientsTable tr").forEach(row => {
+
+    document.querySelectorAll("#patientsTable tr").forEach(function (row) {
       row.style.display = row.innerText.toLowerCase().includes(value)
         ? ""
         : "none";
