@@ -182,3 +182,36 @@ UNLOCK TABLES;
 --
 -- Table structure for table `doctors`
 --
+
+
+DROP TABLE IF EXISTS `doctors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `doctors` (
+  `doctor_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `specialization` varchar(100) DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `license_number` varchar(50) DEFAULT NULL,
+  `joining_date` date DEFAULT NULL,
+  `department_id` int DEFAULT NULL,
+  PRIMARY KEY (`doctor_id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  KEY `fk_doctor_department` (`department_id`),
+  CONSTRAINT `fk_doctor_department` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_doctor_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `doctors`
+--
+
+LOCK TABLES `doctors` WRITE;
+/*!40000 ALTER TABLE `doctors` DISABLE KEYS */;
+INSERT INTO `doctors` VALUES (61,6,'Arun','Mehta','Cardiology','987650001','arun.mehta@hospital.com','LIC1001','2018-06-10',3),(62,7,'Kavita','Sharma','Neurology','987650002','kavita.sharma@hospital.com','LIC1002','2019-03-12',3),(63,8,'Rohit','Verma','Orthopedics','987650003','rohit.verma@hospital.com','LIC1003','2020-01-15',3),(64,9,'Sneha','Iyer','Dermatology','987650004','sneha.iyer@hospital.com','LIC1004','2021-08-20',3),(65,10,'Rajesh','Kumar','General Medicine','987650005','rajesh.kumar@hospital.com','LIC1005','2017-11-05',3),(66,11,'Ananya','Reddy','Pediatrics','987650006','ananya.reddy@hospital.com','LIC1006','2022-02-18',3),(67,12,'Vikram','Singh','ENT','987650007','vikram.singh@hospital.com','LIC1007','2016-09-09',3),(68,13,'Pankaj','Joshi','Urology','987650008','pankaj.joshi@hospital.com','LIC1008','2019-12-01',3),(69,14,'Nitin','Kulkarni','Oncology','987650009','nitin.k@hospital.com','LIC1009','2020-07-07',3),(70,15,'Swati','Patil','Gynecology','987650010','swati.patil@hospital.com','LIC1010','2018-04-25',3);
+/*!40000 ALTER TABLE `doctors` ENABLE KEYS */;
+UNLOCK TABLES;
