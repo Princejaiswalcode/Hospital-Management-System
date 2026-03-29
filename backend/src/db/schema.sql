@@ -479,3 +479,35 @@ INSERT INTO `users` VALUES (1,'admin','$2y$10$gZD62B/FXDw802iJtNIQUu3g0tuUwCtexb
 UNLOCK TABLES;
 
 --
+
+-- Table structure for table `wards`
+--
+
+DROP TABLE IF EXISTS `wards`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `wards` (
+  `ward_id` int NOT NULL AUTO_INCREMENT,
+  `ward_name` varchar(100) NOT NULL,
+  `ward_type` varchar(50) DEFAULT NULL,
+  `total_beds` int NOT NULL,
+  `available_beds` int NOT NULL,
+  `department_id` int DEFAULT NULL,
+  `floor_number` int DEFAULT NULL,
+  PRIMARY KEY (`ward_id`),
+  KEY `fk_ward_department` (`department_id`),
+  CONSTRAINT `fk_ward_department` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wards`
+--
+
+LOCK TABLES `wards` WRITE;
+/*!40000 ALTER TABLE `wards` DISABLE KEYS */;
+INSERT INTO `wards` VALUES (6,'General Ward A','General',30,11,3,1),(7,'General Ward B','General',25,5,3,2),(8,'ICU Ward','ICU',10,2,3,3),(9,'Private Ward','Private',15,6,3,4),(10,'Emergency Ward','Emergency',20,7,3,0);
+/*!40000 ALTER TABLE `wards` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
