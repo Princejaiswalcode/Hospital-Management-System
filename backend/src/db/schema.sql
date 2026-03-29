@@ -215,3 +215,36 @@ LOCK TABLES `doctors` WRITE;
 INSERT INTO `doctors` VALUES (61,6,'Arun','Mehta','Cardiology','987650001','arun.mehta@hospital.com','LIC1001','2018-06-10',3),(62,7,'Kavita','Sharma','Neurology','987650002','kavita.sharma@hospital.com','LIC1002','2019-03-12',3),(63,8,'Rohit','Verma','Orthopedics','987650003','rohit.verma@hospital.com','LIC1003','2020-01-15',3),(64,9,'Sneha','Iyer','Dermatology','987650004','sneha.iyer@hospital.com','LIC1004','2021-08-20',3),(65,10,'Rajesh','Kumar','General Medicine','987650005','rajesh.kumar@hospital.com','LIC1005','2017-11-05',3),(66,11,'Ananya','Reddy','Pediatrics','987650006','ananya.reddy@hospital.com','LIC1006','2022-02-18',3),(67,12,'Vikram','Singh','ENT','987650007','vikram.singh@hospital.com','LIC1007','2016-09-09',3),(68,13,'Pankaj','Joshi','Urology','987650008','pankaj.joshi@hospital.com','LIC1008','2019-12-01',3),(69,14,'Nitin','Kulkarni','Oncology','987650009','nitin.k@hospital.com','LIC1009','2020-07-07',3),(70,15,'Swati','Patil','Gynecology','987650010','swati.patil@hospital.com','LIC1010','2018-04-25',3);
 /*!40000 ALTER TABLE `doctors` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `hospitals`
+--
+
+DROP TABLE IF EXISTS `hospitals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `hospitals` (
+  `hospital_id` int NOT NULL AUTO_INCREMENT,
+  `hospital_name` varchar(200) NOT NULL,
+  `address` text NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `state` varchar(100) NOT NULL,
+  `country` varchar(100) NOT NULL,
+  `phone` varchar(15) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `license_number` varchar(100) NOT NULL,
+  PRIMARY KEY (`hospital_id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `license_number` (`license_number`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `hospitals`
+--
+
+LOCK TABLES `hospitals` WRITE;
+/*!40000 ALTER TABLE `hospitals` DISABLE KEYS */;
+INSERT INTO `hospitals` VALUES (1,'Tata Hospital','MG Road, Near Metro Station','Mumbai','Maharashtra','India','0224567890','Ratan@tatahospital.com','MH-HOSP-2026-001');
+/*!40000 ALTER TABLE `hospitals` ENABLE KEYS */;
+UNLOCK TABLES;
