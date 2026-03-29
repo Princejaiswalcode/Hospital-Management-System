@@ -637,3 +637,34 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `doctor_workload_cursor`()
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE d_id INT;
+    DECLARE total INT;
+
+    DECLARE cur CURSOR FOR
+        SELECT doctor_id, COUNT(*)
+        FROM appointments
+        GROUP BY doctor_id;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO d_id, total;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        IF total > 3 THEN
+            SELECT CONCAT('Doctor ', d_id, ' is overloaded with ', total, ' appointments') AS message;
+        END IF;
+
+    END LOOP;
+
+    CLOSE cur;
+END ;;
+DELIMITER ;
