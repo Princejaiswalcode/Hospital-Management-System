@@ -121,3 +121,34 @@ CREATE TABLE `bills` (
 --
 -- Dumping data for table `bills`
 --
+
+
+LOCK TABLES `bills` WRITE;
+/*!40000 ALTER TABLE `bills` DISABLE KEYS */;
+INSERT INTO `bills` VALUES (1,1,11,NULL,NULL,500.00,200.00,100.00,800.00,'Paid','2026-01-10','2026-01-10'),(3,3,13,NULL,1,500.00,0.00,10000.00,10500.00,'Pending','2026-01-11',NULL),(4,4,14,2,2,700.00,300.00,6000.00,7000.00,'Paid','2026-01-15','2026-01-15'),(5,5,15,NULL,NULL,400.00,200.00,0.00,600.00,'Paid','2026-01-12','2026-01-12'),(6,6,16,3,3,500.00,500.00,3500.00,4500.00,'Pending','2026-01-13',NULL),(7,7,17,NULL,NULL,600.00,300.00,0.00,900.00,'Paid','2026-01-14','2026-01-14'),(8,8,18,4,4,1000.00,500.00,17000.00,18500.00,'Paid','2026-01-18','2026-01-18'),(9,9,19,NULL,NULL,700.00,500.00,0.00,1200.00,'Pending','2026-01-16',NULL),(10,10,20,5,5,1000.00,3000.00,20000.00,24000.00,'Paid','2026-01-17','2026-01-20'),(22,25,NULL,NULL,NULL,10000.00,900.00,17.00,10917.00,'Pending','2026-03-10',NULL),(23,25,NULL,NULL,NULL,12.00,12.00,12.00,36.00,'Paid','2026-03-18','2026-03-18'),(24,25,NULL,NULL,NULL,2.00,5.00,12.00,19.00,'Paid','2026-03-19','2026-03-19'),(25,25,NULL,NULL,NULL,12.00,12.00,12.00,36.00,'Pending','2026-03-19',NULL),(26,25,NULL,NULL,NULL,12.00,12.00,12.00,36.00,'Pending','2026-03-19',NULL),(27,25,NULL,NULL,NULL,112.00,12.00,12.00,136.00,'Pending','2026-03-19',NULL),(28,23,NULL,NULL,NULL,12.00,12.00,2.00,26.00,'Pending','2026-03-19',NULL),(29,22,NULL,NULL,NULL,123.00,345.00,67878.00,68346.00,'Pending','2026-03-19',NULL),(30,22,NULL,NULL,NULL,1222.00,1222.00,12222.00,14666.00,'Pending','2026-03-19',NULL),(31,5,NULL,NULL,NULL,500.00,300.00,200.00,1000.00,'Pending','2026-03-23',NULL);
+/*!40000 ALTER TABLE `bills` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = cp850 */ ;
+/*!50003 SET character_set_results = cp850 */ ;
+/*!50003 SET collation_connection  = cp850_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `auto_total_bill` BEFORE INSERT ON `bills` FOR EACH ROW BEGIN
+    SET NEW.total_amount =
+        IFNULL(NEW.consultation_charge,0) +
+        IFNULL(NEW.medicine_charge,0) +
+        IFNULL(NEW.room_charge,0);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `departments`
+--
