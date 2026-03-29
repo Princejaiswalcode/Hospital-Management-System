@@ -152,3 +152,33 @@ DELIMITER ;
 --
 -- Table structure for table `departments`
 --
+
+DROP TABLE IF EXISTS `departments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `departments` (
+  `department_id` int NOT NULL AUTO_INCREMENT,
+  `department_name` varchar(100) NOT NULL,
+  `head_doctor_id` int DEFAULT NULL,
+  `floor_number` int DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`department_id`),
+  KEY `fk_department_head` (`head_doctor_id`),
+  CONSTRAINT `fk_department_head` FOREIGN KEY (`head_doctor_id`) REFERENCES `doctors` (`doctor_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `departments`
+--
+
+LOCK TABLES `departments` WRITE;
+/*!40000 ALTER TABLE `departments` DISABLE KEYS */;
+INSERT INTO `departments` VALUES (3,'Cardiology',61,2,'022-4567890','Heart-related diagnosis and treatments');
+/*!40000 ALTER TABLE `departments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `doctors`
+--
