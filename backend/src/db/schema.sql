@@ -350,3 +350,34 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
+
+-- Table structure for table `receptionists`
+--
+
+DROP TABLE IF EXISTS `receptionists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `receptionists` (
+  `receptionist_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `shift` varchar(20) DEFAULT NULL,
+  `joining_date` date DEFAULT NULL,
+  PRIMARY KEY (`receptionist_id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  CONSTRAINT `fk_receptionist_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `receptionists`
+--
+
+LOCK TABLES `receptionists` WRITE;
+/*!40000 ALTER TABLE `receptionists` DISABLE KEYS */;
+INSERT INTO `receptionists` VALUES (1,26,'Rahul','Verma','981100001','rahul.verma@hospital.com','Morning','2019-01-01'),(2,27,'Anita','Desai','981100002','anita.desai@hospital.com','Evening','2020-04-15'),(3,28,'Suresh','Patel','981100003','suresh.patel@hospital.com','Morning','2018-07-20'),(4,29,'Kavya','Iyer','981100004','kavya.iyer@hospital.com','Night','2021-09-10'),(5,30,'Manoj','Kulkarni','981100005','manoj.k@hospital.com','Evening','2017-11-25'),(6,31,'Rina','Das','989900001','rina.das@hospital.com','Morning','2021-04-12');
+/*!40000 ALTER TABLE `receptionists` ENABLE KEYS */;
+UNLOCK TABLES;
