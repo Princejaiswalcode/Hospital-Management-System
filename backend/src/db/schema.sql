@@ -285,3 +285,38 @@ INSERT INTO `nurses` VALUES (21,16,'Kavita','Singh','989800001','kavita.singh@ho
 UNLOCK TABLES;
 
 --
+
+-- Table structure for table `patients`
+--
+
+DROP TABLE IF EXISTS `patients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `patients` (
+  `patient_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `gender` char(1) DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `address` text,
+  `blood_group` varchar(5) DEFAULT NULL,
+  `emergency_contact` varchar(15) DEFAULT NULL,
+  `status` enum('Admitted','Observation','Discharged') DEFAULT 'Observation',
+  PRIMARY KEY (`patient_id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  CONSTRAINT `fk_patient_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `patients`
+--
+
+LOCK TABLES `patients` WRITE;
+/*!40000 ALTER TABLE `patients` DISABLE KEYS */;
+INSERT INTO `patients` VALUES (1,37,'Rajesh','Kumar','1985-03-15','M','900100001','rajesh.k@gmail.com','Mumbai','O+','900200001','Observation'),(3,38,'Suresh','Patel','1978-11-02','M','900100003','suresh.p@gmail.com','Surat','B+','900200003','Observation'),(4,39,'Ananya','Reddy','1995-01-19','F','900100004','ananya.r@gmail.com','Hyderabad','AB+','900200004','Observation'),(5,40,'Vikram','Singh','1988-09-10','M','900100005','vikram.s@gmail.com','Delhi','O-','900200005','Observation'),(6,41,'Karan','Malhotra','1992-04-25','M','900100006','karan.m@gmail.com','Jaipur','A-','900200006','Observation'),(7,42,'Aditya','Menon','1983-12-30','M','900100007','aditya.m@gmail.com','Kochi','B-','900200007','Observation'),(8,43,'Neha','Joshi','1997-06-05','F','900100008','neha.j@gmail.com','Nagpur','O+','900200008','Observation'),(9,44,'Rohan','Gupta','1986-08-18','M','900100009','rohan.g@gmail.com','Indore','AB-','900200009','Observation'),(10,45,'Sneha','Kulkarni','1993-02-14','F','900100010','sneha.k@gmail.com','Kolhapur','A+','900200010','Observation'),(22,NULL,'prince','jaiswal','2011-02-06','M','9302256107','prince.jaiswal@avantika.edu.in','32/232 ews','O+','56565656','Admitted'),(23,NULL,'Mahek','Yadav','2005-02-21','F','75757557575','mahek@gmail.com','45/343','O+','56565656','Discharged'),(25,NULL,'himmat','bhihari lal ji','2006-09-18','F','676767676766',NULL,'ghar k piche',NULL,NULL,'Observation');
+/*!40000 ALTER TABLE `patients` ENABLE KEYS */;
+UNLOCK TABLES;
