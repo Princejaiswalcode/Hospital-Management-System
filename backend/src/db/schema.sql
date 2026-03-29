@@ -248,3 +248,40 @@ LOCK TABLES `hospitals` WRITE;
 INSERT INTO `hospitals` VALUES (1,'Tata Hospital','MG Road, Near Metro Station','Mumbai','Maharashtra','India','0224567890','Ratan@tatahospital.com','MH-HOSP-2026-001');
 /*!40000 ALTER TABLE `hospitals` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `nurses`
+--
+
+DROP TABLE IF EXISTS `nurses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nurses` (
+  `nurse_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `shift` varchar(20) DEFAULT NULL,
+  `joining_date` date DEFAULT NULL,
+  `department_id` int DEFAULT NULL,
+  PRIMARY KEY (`nurse_id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  KEY `fk_nurse_department` (`department_id`),
+  CONSTRAINT `fk_nurse_department` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_nurse_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `nurses`
+--
+
+LOCK TABLES `nurses` WRITE;
+/*!40000 ALTER TABLE `nurses` DISABLE KEYS */;
+INSERT INTO `nurses` VALUES (21,16,'Kavita','Singh','989800001','kavita.singh@hospital.com','Morning','2020-01-10',3),(22,17,'Rina','Das','989800002','rina.das@hospital.com','Night','2019-05-22',3),(23,18,'Meena','Shah','989800003','meena.shah@hospital.com','Morning','2021-03-18',3),(24,19,'Pooja','Nair','989800004','pooja.nair@hospital.com','Evening','2022-07-11',3),(25,20,'Alka','Jain','989800005','alka.jain@hospital.com','Night','2018-10-09',3),(26,21,'Neetu','Kapoor','989800006','neetu.k@hospital.com','Morning','2020-12-12',3),(27,22,'Shalini','Roy','989800007','shalini.roy@hospital.com','Evening','2019-09-15',3),(28,23,'Deepa','Menon','989800008','deepa.m@hospital.com','Night','2021-06-21',3),(29,24,'Kiran','Joshi','989800009','kiran.j@hospital.com','Morning','2017-08-30',3),(30,25,'Sunita','Rao','989800010','sunita.rao@hospital.com','Evening','2018-02-14',3);
+/*!40000 ALTER TABLE `nurses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
