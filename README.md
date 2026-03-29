@@ -76,7 +76,7 @@ The system provides role-based dashboards for different users, ensuring that eac
 
 ### Database
 
-* (Specify your database: MySQL / MongoDB)
+* Database: MySQL 
 
 ---
 
