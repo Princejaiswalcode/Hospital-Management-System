@@ -320,3 +320,33 @@ LOCK TABLES `patients` WRITE;
 INSERT INTO `patients` VALUES (1,37,'Rajesh','Kumar','1985-03-15','M','900100001','rajesh.k@gmail.com','Mumbai','O+','900200001','Observation'),(3,38,'Suresh','Patel','1978-11-02','M','900100003','suresh.p@gmail.com','Surat','B+','900200003','Observation'),(4,39,'Ananya','Reddy','1995-01-19','F','900100004','ananya.r@gmail.com','Hyderabad','AB+','900200004','Observation'),(5,40,'Vikram','Singh','1988-09-10','M','900100005','vikram.s@gmail.com','Delhi','O-','900200005','Observation'),(6,41,'Karan','Malhotra','1992-04-25','M','900100006','karan.m@gmail.com','Jaipur','A-','900200006','Observation'),(7,42,'Aditya','Menon','1983-12-30','M','900100007','aditya.m@gmail.com','Kochi','B-','900200007','Observation'),(8,43,'Neha','Joshi','1997-06-05','F','900100008','neha.j@gmail.com','Nagpur','O+','900200008','Observation'),(9,44,'Rohan','Gupta','1986-08-18','M','900100009','rohan.g@gmail.com','Indore','AB-','900200009','Observation'),(10,45,'Sneha','Kulkarni','1993-02-14','F','900100010','sneha.k@gmail.com','Kolhapur','A+','900200010','Observation'),(22,NULL,'prince','jaiswal','2011-02-06','M','9302256107','prince.jaiswal@avantika.edu.in','32/232 ews','O+','56565656','Admitted'),(23,NULL,'Mahek','Yadav','2005-02-21','F','75757557575','mahek@gmail.com','45/343','O+','56565656','Discharged'),(25,NULL,'himmat','bhihari lal ji','2006-09-18','F','676767676766',NULL,'ghar k piche',NULL,NULL,'Observation');
 /*!40000 ALTER TABLE `patients` ENABLE KEYS */;
 UNLOCK TABLES;
+
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = cp850 */ ;
+/*!50003 SET character_set_results = cp850 */ ;
+/*!50003 SET collation_connection  = cp850_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `prevent_patient_delete` BEFORE DELETE ON `patients` FOR EACH ROW BEGIN
+    DECLARE v_count INT;
+
+    SELECT COUNT(*) INTO v_count
+    FROM bills
+    WHERE patient_id = OLD.patient_id;
+
+    IF v_count > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot delete patient with existing bills';
+    END IF;
+
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
