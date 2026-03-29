@@ -381,3 +381,35 @@ LOCK TABLES `receptionists` WRITE;
 INSERT INTO `receptionists` VALUES (1,26,'Rahul','Verma','981100001','rahul.verma@hospital.com','Morning','2019-01-01'),(2,27,'Anita','Desai','981100002','anita.desai@hospital.com','Evening','2020-04-15'),(3,28,'Suresh','Patel','981100003','suresh.patel@hospital.com','Morning','2018-07-20'),(4,29,'Kavya','Iyer','981100004','kavya.iyer@hospital.com','Night','2021-09-10'),(5,30,'Manoj','Kulkarni','981100005','manoj.k@hospital.com','Evening','2017-11-25'),(6,31,'Rina','Das','989900001','rina.das@hospital.com','Morning','2021-04-12');
 /*!40000 ALTER TABLE `receptionists` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `salary_payments`
+--
+
+DROP TABLE IF EXISTS `salary_payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `salary_payments` (
+  `payment_id` int NOT NULL AUTO_INCREMENT,
+  `employee_id` int NOT NULL,
+  `employee_type` varchar(20) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_date` date NOT NULL,
+  `payment_month` varchar(20) NOT NULL,
+  `payment_year` int NOT NULL,
+  `payment_method` varchar(50) NOT NULL,
+  PRIMARY KEY (`payment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `salary_payments`
+--
+
+LOCK TABLES `salary_payments` WRITE;
+/*!40000 ALTER TABLE `salary_payments` DISABLE KEYS */;
+INSERT INTO `salary_payments` VALUES (1,61,'doctor',80000.00,'2026-01-01','January',2026,'Bank Transfer'),(2,62,'doctor',75000.00,'2026-01-01','January',2026,'Bank Transfer'),(3,63,'doctor',70000.00,'2026-01-01','January',2026,'Bank Transfer'),(4,64,'doctor',85000.00,'2026-01-01','January',2026,'Bank Transfer'),(5,65,'doctor',78000.00,'2026-01-01','January',2026,'Bank Transfer'),(6,61,'doctor',80000.00,'2026-01-01','January',2026,'Bank Transfer'),(7,62,'doctor',75000.00,'2026-01-01','January',2026,'Bank Transfer'),(8,63,'doctor',70000.00,'2026-01-01','January',2026,'Bank Transfer'),(9,64,'doctor',85000.00,'2026-01-01','January',2026,'Bank Transfer'),(10,65,'doctor',78000.00,'2026-01-01','January',2026,'Bank Transfer'),(19,21,'nurse',123.00,'2026-03-19','3',2026,'cash'),(20,61,'doctor',1.00,'2026-03-20','3',2026,'cash');
+/*!40000 ALTER TABLE `salary_payments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
