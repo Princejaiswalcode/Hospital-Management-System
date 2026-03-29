@@ -43,7 +43,6 @@ CREATE TABLE `admissions` (
 
 --
 -- Dumping data for table `admissions`
-
 --
 
 LOCK TABLES `admissions` WRITE;
@@ -122,7 +121,6 @@ CREATE TABLE `bills` (
 -- Dumping data for table `bills`
 --
 
-
 LOCK TABLES `bills` WRITE;
 /*!40000 ALTER TABLE `bills` DISABLE KEYS */;
 INSERT INTO `bills` VALUES (1,1,11,NULL,NULL,500.00,200.00,100.00,800.00,'Paid','2026-01-10','2026-01-10'),(3,3,13,NULL,1,500.00,0.00,10000.00,10500.00,'Pending','2026-01-11',NULL),(4,4,14,2,2,700.00,300.00,6000.00,7000.00,'Paid','2026-01-15','2026-01-15'),(5,5,15,NULL,NULL,400.00,200.00,0.00,600.00,'Paid','2026-01-12','2026-01-12'),(6,6,16,3,3,500.00,500.00,3500.00,4500.00,'Pending','2026-01-13',NULL),(7,7,17,NULL,NULL,600.00,300.00,0.00,900.00,'Paid','2026-01-14','2026-01-14'),(8,8,18,4,4,1000.00,500.00,17000.00,18500.00,'Paid','2026-01-18','2026-01-18'),(9,9,19,NULL,NULL,700.00,500.00,0.00,1200.00,'Pending','2026-01-16',NULL),(10,10,20,5,5,1000.00,3000.00,20000.00,24000.00,'Paid','2026-01-17','2026-01-20'),(22,25,NULL,NULL,NULL,10000.00,900.00,17.00,10917.00,'Pending','2026-03-10',NULL),(23,25,NULL,NULL,NULL,12.00,12.00,12.00,36.00,'Paid','2026-03-18','2026-03-18'),(24,25,NULL,NULL,NULL,2.00,5.00,12.00,19.00,'Paid','2026-03-19','2026-03-19'),(25,25,NULL,NULL,NULL,12.00,12.00,12.00,36.00,'Pending','2026-03-19',NULL),(26,25,NULL,NULL,NULL,12.00,12.00,12.00,36.00,'Pending','2026-03-19',NULL),(27,25,NULL,NULL,NULL,112.00,12.00,12.00,136.00,'Pending','2026-03-19',NULL),(28,23,NULL,NULL,NULL,12.00,12.00,2.00,26.00,'Pending','2026-03-19',NULL),(29,22,NULL,NULL,NULL,123.00,345.00,67878.00,68346.00,'Pending','2026-03-19',NULL),(30,22,NULL,NULL,NULL,1222.00,1222.00,12222.00,14666.00,'Pending','2026-03-19',NULL),(31,5,NULL,NULL,NULL,500.00,300.00,200.00,1000.00,'Pending','2026-03-23',NULL);
@@ -182,7 +180,6 @@ UNLOCK TABLES;
 --
 -- Table structure for table `doctors`
 --
-
 
 DROP TABLE IF EXISTS `doctors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -285,7 +282,6 @@ INSERT INTO `nurses` VALUES (21,16,'Kavita','Singh','989800001','kavita.singh@ho
 UNLOCK TABLES;
 
 --
-
 -- Table structure for table `patients`
 --
 
@@ -320,7 +316,6 @@ LOCK TABLES `patients` WRITE;
 INSERT INTO `patients` VALUES (1,37,'Rajesh','Kumar','1985-03-15','M','900100001','rajesh.k@gmail.com','Mumbai','O+','900200001','Observation'),(3,38,'Suresh','Patel','1978-11-02','M','900100003','suresh.p@gmail.com','Surat','B+','900200003','Observation'),(4,39,'Ananya','Reddy','1995-01-19','F','900100004','ananya.r@gmail.com','Hyderabad','AB+','900200004','Observation'),(5,40,'Vikram','Singh','1988-09-10','M','900100005','vikram.s@gmail.com','Delhi','O-','900200005','Observation'),(6,41,'Karan','Malhotra','1992-04-25','M','900100006','karan.m@gmail.com','Jaipur','A-','900200006','Observation'),(7,42,'Aditya','Menon','1983-12-30','M','900100007','aditya.m@gmail.com','Kochi','B-','900200007','Observation'),(8,43,'Neha','Joshi','1997-06-05','F','900100008','neha.j@gmail.com','Nagpur','O+','900200008','Observation'),(9,44,'Rohan','Gupta','1986-08-18','M','900100009','rohan.g@gmail.com','Indore','AB-','900200009','Observation'),(10,45,'Sneha','Kulkarni','1993-02-14','F','900100010','sneha.k@gmail.com','Kolhapur','A+','900200010','Observation'),(22,NULL,'prince','jaiswal','2011-02-06','M','9302256107','prince.jaiswal@avantika.edu.in','32/232 ews','O+','56565656','Admitted'),(23,NULL,'Mahek','Yadav','2005-02-21','F','75757557575','mahek@gmail.com','45/343','O+','56565656','Discharged'),(25,NULL,'himmat','bhihari lal ji','2006-09-18','F','676767676766',NULL,'ghar k piche',NULL,NULL,'Observation');
 /*!40000 ALTER TABLE `patients` ENABLE KEYS */;
 UNLOCK TABLES;
-
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -350,7 +345,6 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
-
 -- Table structure for table `receptionists`
 --
 
@@ -413,7 +407,6 @@ INSERT INTO `salary_payments` VALUES (1,61,'doctor',80000.00,'2026-01-01','Janua
 UNLOCK TABLES;
 
 --
-
 -- Table structure for table `treatments`
 --
 
@@ -479,7 +472,6 @@ INSERT INTO `users` VALUES (1,'admin','$2y$10$gZD62B/FXDw802iJtNIQUu3g0tuUwCtexb
 UNLOCK TABLES;
 
 --
-
 -- Table structure for table `wards`
 --
 
@@ -511,7 +503,6 @@ INSERT INTO `wards` VALUES (6,'General Ward A','General',30,11,3,1),(7,'General 
 UNLOCK TABLES;
 
 --
-
 -- Dumping events for database 'hospital_management_system'
 --
 
@@ -549,7 +540,6 @@ BEGIN
 
 END ;;
 DELIMITER ;
-
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -596,7 +586,6 @@ BEGIN
 
 END ;;
 DELIMITER ;
-
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -637,7 +626,6 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `doctor_workload_cursor`()
 BEGIN
     DECLARE done INT DEFAULT 0;
@@ -668,7 +656,6 @@ BEGIN
     CLOSE cur;
 END ;;
 DELIMITER ;
-
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -711,7 +698,6 @@ BEGIN
     CLOSE cur;
 END ;;
 DELIMITER ;
-
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
