@@ -413,3 +413,38 @@ INSERT INTO `salary_payments` VALUES (1,61,'doctor',80000.00,'2026-01-01','Janua
 UNLOCK TABLES;
 
 --
+
+-- Table structure for table `treatments`
+--
+
+DROP TABLE IF EXISTS `treatments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `treatments` (
+  `treatment_id` int NOT NULL AUTO_INCREMENT,
+  `appointment_id` int NOT NULL,
+  `patient_id` int NOT NULL,
+  `doctor_id` int NOT NULL,
+  `treatment_date` date NOT NULL,
+  `diagnosis` text,
+  `medicines` text,
+  `follow_up_date` date DEFAULT NULL,
+  PRIMARY KEY (`treatment_id`),
+  KEY `fk_treatment_appointment` (`appointment_id`),
+  KEY `fk_treatment_patient` (`patient_id`),
+  KEY `fk_treatment_doctor` (`doctor_id`),
+  CONSTRAINT `fk_treatment_appointment` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_treatment_doctor` FOREIGN KEY (`doctor_id`) REFERENCES `doctors` (`doctor_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_treatment_patient` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `treatments`
+--
+
+LOCK TABLES `treatments` WRITE;
+/*!40000 ALTER TABLE `treatments` DISABLE KEYS */;
+INSERT INTO `treatments` VALUES (2,14,4,64,'2026-01-26','Skin Allergy','Antihistamine cream',NULL),(3,16,6,61,'2026-01-27','Cardiac Checkup','Beta blockers','2026-02-15'),(4,19,9,64,'2026-01-29','Dermatitis','Moisturizing lotion',NULL),(5,13,3,63,'2026-01-30','Ligament Strain','Physiotherapy','2026-02-20'),(6,11,1,62,'2026-01-10','Type 2 Diabetes','Metformin 500mg','2026-02-10'),(7,23,22,68,'2026-03-19','2','2',NULL),(8,15,5,63,'2026-03-19','12','12',NULL),(9,16,6,63,'2026-03-19','12','12',NULL),(10,31,3,62,'2026-03-19','12','12',NULL);
+/*!40000 ALTER TABLE `treatments` ENABLE KEYS */;
+UNLOCK TABLES;
